@@ -1,0 +1,35 @@
+@using System.Diagnostics
+
+@{
+    var version = FileVersionInfo.GetVersionInfo(typeof(IdentityServer4.Hosting.IdentityServerMiddleware).Assembly.Location).ProductVersion.Split('+').First();
+}
+
+<div class="welcome-page">
+    <div class="card">
+        <div class="card-header">
+            <h1>
+                <img class="img-responsive" src="~/GemspaceLogo.png">
+                <small class="text-muted">(version @version)</small>
+            </h1>
+        </div>
+        
+        <div class="card-body">
+            <ul>
+                <li>
+                    Manage all the authentication and authorization needs on one central server
+                </li>
+                <li>
+                    Protect API resouces on one central server
+                </li>
+                <li>
+                    IdentityServer publishes a
+                    <a href="~/.well-known/openid-configuration">discovery document</a>
+                    where you can find metadata and links to all the endpoints, key material, etc.
+                </li>
+
+            </ul>
+        </div>
+        
+    </div>
+    
+</div>

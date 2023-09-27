@@ -1,0 +1,620 @@
+﻿<div class="container-fluid">
+    <div class="row">
+        <nav class="col-md-2 d-none d-md-block bg-light sidebar" style="border-radius:10px">
+            <div class="sidebar-sticky">
+                <ul class="nav flex-column">
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="scopeslink">
+                            <span data-feather="file"><i class="fa fa-bullseye" aria-hidden="true"></i></span>
+                            Scopes
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="resourcelink">
+                            <span data-feather="shopping-cart"><i class="fa fa-book" aria-hidden="true"></i></span>
+                            Resources
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#" id="clientslink">
+                            <span data-feather="home"><i class="fa fa-server" aria-hidden="true"></i></span>
+                            Clients<span class="sr-only">(current)</span>
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+        </nav>
+        <div class="col-md-10">
+            <ul class="nav nav-tabs" id="myTab">
+                <li class="active"><a href="#scopes"></a></li>
+                <li><a href="#resources"></a></li>
+                <li><a href="#clients"></a></li>
+            </ul>
+
+            <div class="tab-content">
+                <div class="tab-pane active" id="scopes">
+                    <br/><br/>
+                    <header style="text-align:center"><h4>API SCOPE</h4></header>
+                    <form class="form-horizontal" id="scopeForm">
+                        <div class="form-group">
+                            <label for="name" class="col-sm-2 control-label">Name</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="name" placeholder="Name" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="display" class="col-sm-2 control-label">DisplayName</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="displayName" placeholder="DisplayName">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="description" class="col-sm-2 control-label">Description</label>
+                            <div class="col-sm-10">
+                                <textarea class="form-control" id="description" placeholder="Description"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" id="enabled"> Enabled
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" id="required"> Required
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" id="emphasize"> Emphasize
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" id="showInDiscoveryDocument"> Show In Discovery Document
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="tab-pane" id="resources">
+                    <br /><br />
+                    <header style="text-align:center"><h4>API RESOURCES</h4></header>
+                    <form class="form-horizontal" id="resourceForm">
+                        <div class="form-group">
+                            <label for="name" class="col-sm-2 control-label">Name</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="apiResourceName" placeholder="Name" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="display" class="col-sm-2 control-label">DisplayName</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="apiResourceDisplayName" placeholder="DisplayName">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="description" class="col-sm-2 control-label">Description</label>
+                            <div class="col-sm-10">
+                                <textarea class="form-control" id="apiResourceDescription" placeholder="Description"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="apiResourcescopes[]" class="col-sm-2 control-label">Scope</label>
+                            <div class="col-sm-10">
+                                <select class="form-control" id="apiResourceScopeList" name="apiResourcescopes[]" multiple="multiple"></select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" id="apiResourceEnabled"> Enabled
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" id="apiResourceShowInDiscoveryDocument"> Show In Discovery Document
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="tab-pane" id="clients">
+                    <br /><br />
+                    <header style="text-align:center"><h4>CLIENTS</h4></header>
+                    <form class="form-horizontal" id="clientsForm">
+                        <div class="form-group">
+                            <label for="clientname" class="col-sm-2 control-label">Name</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="clientname" placeholder="Name" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="clientId" class="col-sm-2 control-label">Client Id</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="clientId" placeholder="Name" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="clientsecret" class="col-sm-2 control-label">Secret</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="clientsecret" placeholder="secret" disabled>
+                                <div class="spinner-border text-primary" role="status" id="idploader" style="display:none">
+                                    <span class="sr-only">Loading...</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="clientUri" class="col-sm-2 control-label">Client Uri</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="clientUri" placeholder="Client uri" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="clientRedirectUri" class="col-sm-2 control-label">Client Redirect Uri</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="clientRedirectUri" placeholder="Client Redirect uri" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="clientPostRedirectUri" class="col-sm-2 control-label">Client Post Redirect Uri</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="clientUri" placeholder="Client Post Redirect uri">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="frontChannelUri" class="col-sm-2 control-label">Front Channel Uri</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="frontChannelUri" placeholder="Front Channel uri">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="backChannelUri" class="col-sm-2 control-label">Back Channel Uri</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="backChannelUri" placeholder="Back Channel uri">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="scopes[]" class="col-sm-2 control-label">Scope</label>
+                            <div class="col-sm-10">
+                                <select class="form-control" id="clientscopeList" name="scopes[]" multiple="multiple"></select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="grants[]" class="col-sm-2 control-label">Grants</label>
+                            <div class="col-sm-10">
+                                <select class="form-control" id="clientgrantsList" name="grants[]" multiple="multiple"></select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" id="requireClientSecret"> Require Client Secret
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" id="requireConscent"> Require Conscent
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" id="requirePKCE"> Require PKCE
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" id="allowAccessTokenBrowser"> Allow Access token via browser
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" id="allowOfflineAccess"> Allow offline access
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    const makeValidationNotification = function (Title, Body, color,icon) {
+        iziToast.show({
+            title: Title,
+            message: Body,
+            color: color, //Red
+            icon: icon,
+            theme: "dark",
+            position: "topRight",
+            timeoutProgressbar: true,
+            transitionIn: 'fadeInUp',
+            transitionOut: 'fadeOutDown',
+            pauseOnHover: true,
+            layout: 2
+        });
+    };
+    $('#scopeslink').on("click", function (event) {
+        $('#myTab a[href="#scopes"]').tab('show')
+    })
+
+    $('#resourcelink').on("click", function (event) {
+        $('#myTab a[href="#resources"]').tab('show')
+    })
+
+    $('#clientslink').on("click", function (event) {
+        $('#myTab a[href="#clients"]').tab('show')
+    })
+
+    $('#scopeForm').on('submit', function (event) {
+        event.preventDefault()
+
+        const apiScopeFormData = new FormData();
+
+        const name = $('#name').val()
+        const displayName = $('#displayName').val()
+        const description = $('#description').val()
+        const enabled = $('#enabled').prop('checked')
+        const required = $('#required').prop('checked')
+        const emphasize = $('#emphasize').prop('checked')
+        const showInDiscoveryDocument = $('#showInDiscoveryDocument').prop('checked')
+
+        apiScopeFormData.set('name', name)
+        apiScopeFormData.set('displayName', displayName)
+        apiScopeFormData.set('description', description)
+        apiScopeFormData.set('enabled', enabled)
+        apiScopeFormData.set('required', required)
+        apiScopeFormData.set('emphasize', emphasize)
+        apiScopeFormData.set('showInDiscoveryDocument', showInDiscoveryDocument)
+
+        const $url = '@Url.Action("CreateApiScope", "Admin")'
+
+        $.ajax({
+            type: "POST",
+            url: $url,
+            data: apiScopeFormData,
+            async: true,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                if (data.Success == true) {
+                    makeValidationNotification("Message",data.Message, "#00af66", "fa fa-check")
+                }
+                else {
+                    makeValidationNotification("Message", data.Error, "#bc9942", 'fa fa-exclamation-triangle')
+                }
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                makeValidationNotification("Message", "Api scope was not created", "#BD5B5B", 'fa fa-exclamation-triangle')
+            }
+        });
+
+
+    })
+
+    $('#clientname').on('input', function (event) {
+        const textValue = $(this).val()
+        if (!textValue) {
+            $('#clientsecret').val('')
+            return
+        }
+        if (!$('#clientId').val()) {
+            const uuid = uuidv4()
+            console.log(uuid)
+            $('#clientId').val(uuid)
+        }
+        const text = textValue + Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5)
+        $('#idploader').show()
+        const textHash = sha256(text)
+            .then(data => {
+                $('#clientsecret').val(data)
+                $('#idploader').hide()
+            })
+            .catch(error => {
+                console.log(error)
+                $('#idploader').hide()
+            })
+    })
+
+    async function sha256(message) {
+        // encode as UTF-8
+        const msgBuffer = new TextEncoder().encode(message);
+
+        // hash the message
+        const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+
+        // convert ArrayBuffer to Array
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+
+        // convert bytes to hex string
+        const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        return hashHex;
+    }
+
+    function uuidv4() {
+        return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
+            (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+        );
+    }
+
+
+    $('#clientscopeList').select2({
+        placeholder: "Type here to search api scopes",
+        ajax: {
+            minimumInputLength: 2,
+            delay: 500,
+            type: 'POST',
+            url: '@Url.Action("GetApiScopes", "Admin")',
+            dataType: 'json',
+            data: function (term) {
+                return {
+                    searchTerm: term.term,
+
+                }
+            },
+            processResults: function (data) {
+                return {
+                    results: data
+                }
+            },
+            cache: true
+        },
+        width: 'resolve',
+        templateResult: function (item) {
+            if (!item.id) return item.text
+            return $(`<span>${item.text}</span>`)
+        }
+    })
+
+    $('#clientgrantsList').select2({
+        placeholder: "Type here to search grants",
+        ajax: {
+            minimumInputLength: 2,
+            delay: 500,
+            type: 'POST',
+            url: '@Url.Action("GetGrantTypes", "Admin")',
+            dataType: 'json',
+            data: function (term) {
+                return {
+                    searchTerm: term.term,
+
+                }
+            },
+            processResults: function (data) {
+                return {
+                    results: data
+                }
+            },
+            cache: true
+        },
+        width: 'resolve',
+        templateResult: function (item) {
+            if (!item.id) return item.text
+            return $(`<span>${item.text}</span>`)
+        }
+    })
+
+    $('#clientsForm').on('submit', function (event) {
+        event.preventDefault()
+
+
+        const clientsname = $('#clientname').val()
+        const clientsecret = $('#clientsecret').val()
+        const scopeList = $('#clientscopeList').val()
+        const grantList = $('#clientgrantsList').val()
+        const clientId = $('#clientId').val()
+        const clientUri = $('#clientUri').val()
+        const frontChannelUri = $('#frontChannelUri').val() ? $('#frontChannelUri').val() : ""
+        const backChannelUri = $('#backChannelUri').val() ? $('#backChannelUri').val() : ""
+        const requireClientSecret = $('#requireClientSeret').prop('checked')
+        const requireConscent = $('#requireConscent').prop('checked')
+        const requirePKCE = $('#requirePKCE').prop('checked')
+        const allowAccessTokenViaBrowser = $('#allowAccessTokenBrowser').prop('checked')
+        const allowOfflineAccess = $('#allowOfflineAccess').prop('checked')
+        const clientRedirectUri = $('#clientRedirectUri').val()
+        const clientPostRedirectUri = $('#clientPostRedirectUri').val() ? $('#clientPostRedirectUri').val() : ""
+
+
+        if (scopeList.length <= 0) {
+            makeValidationNotification("Message", "Atleast one scope must be selected", "#BD5B5B", 'fa fa-exclamation-triangle')
+            return
+        }
+
+        if (grantList.length <= 0) {
+            makeValidationNotification("Message", "Atleast one grant type must be selected", "#BD5B5B", 'fa fa-exclamation-triangle')
+            return
+        }
+
+        const clientsFormData = new FormData()
+
+        clientsFormData.set('clientName', clientsname)
+        clientsFormData.set('clientId', clientId)
+        clientsFormData.set('clientSecret', clientsecret)
+        clientsFormData.set('clientUri', clientUri)
+        clientsFormData.set('frontChannelUri', frontChannelUri)
+        clientsFormData.set('backChannelUri', backChannelUri)
+        clientsFormData.set('scopeList', JSON.stringify(scopeList.map(scope => parseInt(scope))))
+        clientsFormData.set('grantTypeList', JSON.stringify(grantList.map(grant => parseInt(grant))))
+        clientsFormData.set('requireClientSecret', requireClientSecret)
+        clientsFormData.set('requireConscent', requireConscent)
+        clientsFormData.set('requirePKCE', requirePKCE)
+        clientsFormData.set('allowAccessTokenViaBrowser', allowAccessTokenViaBrowser)
+        clientsFormData.set('allowOfflineAccess', allowOfflineAccess)
+        clientsFormData.set('clientRedirectUri', clientRedirectUri)
+        clientsFormData.set('clientPostRedirectUri', clientPostRedirectUri)
+
+
+        const $url = '@Url.Action("CreateClient", "Admin")'
+
+        $.ajax({
+            type: "POST",
+            url: $url,
+            data: clientsFormData,
+            async: true,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                if (data.Success == true) {
+                    makeValidationNotification("Message", data.Message, "#00af66", "fa fa-check")
+                    clearForm('#clientsForm')
+                }
+                else {
+                    makeValidationNotification("Message", data.Error, "#bc9942", 'fa fa-exclamation-triangle')
+                }
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                makeValidationNotification("Message", "Client was not created", "#BD5B5B", 'fa fa-exclamation-triangle')
+            }
+        });
+
+    })
+
+    function clearForm(formid) {
+        $(':input', formid)
+            .not(':button, :submit, :reset, :hidden')
+            .val('')
+            .prop('checked', false)
+            .prop('selected', false);
+        $(':select', formid)
+            .not(':button, :submit, :reset, :hidden')
+            .val('')
+            .prop('checked', false)
+            .prop('selected', false);
+    }
+
+    $('#apiResourceScopeList').select2({
+        placeholder: "Type here to search api scopes",
+        ajax: {
+            minimumInputLength: 2,
+            delay: 500,
+            type: 'POST',
+            url: '@Url.Action("GetApiScopes", "Admin")',
+            dataType: 'json',
+            data: function (term) {
+                return {
+                    searchTerm: term.term,
+
+                }
+            },
+            processResults: function (data) {
+                return {
+                    results: data
+                }
+            },
+            cache: true
+        },
+        width: 'resolve',
+        templateResult: function (item) {
+            if (!item.id) return item.text
+            return $(`<span>${item.text}</span>`)
+        }
+    })
+
+    $('#resourceForm').on('submit', function (event) {
+        event.preventDefault()
+
+        const apiResourceName = $('#apiResourceName').val()
+        const apiResourceDisplayName = $("#apiResourceDisplayName").val()
+        const apiResourceDescription = $("#apiResourceDescription").val()
+        const apiResourceScopeList = $('#apiResourceScopeList').val()
+        const apiResourceEnabled = $("#apiResourceEnabled").prop('checked')
+        const apiResourceShowInDiscoveryDocument = $('#apiResourceShowInDiscoveryDocument').prop('checked')
+
+        const apiResourceFormData = new FormData()
+
+        apiResourceFormData.set('name', apiResourceName || "")
+        apiResourceFormData.set('displayName', apiResourceDisplayName || "")
+        apiResourceFormData.set('description', apiResourceDescription || "")
+        apiResourceFormData.set('scopeList', apiResourceScopeList ? JSON.stringify(apiResourceScopeList) : '[]')
+        apiResourceFormData.set('enabled', apiResourceEnabled)
+        apiResourceFormData.set('showInDiscoveryDocument', apiResourceShowInDiscoveryDocument)
+
+        const url = '@Url.Action("CreateApiResource","Admin")'
+
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: apiResourceFormData,
+                async: true,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    if (data.Success == true) {
+                        makeValidationNotification("Message", data.Message, "#00af66", "fa fa-check")
+                        clearForm('#resourceForm')
+                    }
+                    else {
+                        makeValidationNotification("Message", data.Error, "#bc9942", 'fa fa-exclamation-triangle')
+                    }
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    makeValidationNotification("Message", "Client was not created", "#BD5B5B", 'fa fa-exclamation-triangle')
+                }
+            });
+
+
+   })
+
+
+</script>

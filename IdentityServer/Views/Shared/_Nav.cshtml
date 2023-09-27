@@ -1,0 +1,74 @@
+@using IdentityServer4.Extensions
+
+@{
+    string name = null;
+    if (!true.Equals(ViewData["signed-out"]))
+    {
+        name = Context.User?.GetDisplayName();
+    }
+}
+
+<div class="nav-page">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+
+        <a href="~/" class="navbar-brand">
+            <img src="~/GemspaceIcon.png" width="48" height="48" class="icon-banner">
+        </a>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarColor01">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">
+                        Home
+                        <span class="sr-only">(current)</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Contact</a>
+                </li>
+                @if (!string.IsNullOrWhiteSpace(name))
+                {
+
+                    <li class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">@name <b class="caret"></b></a>
+
+                        <div class="dropdown-menu">
+                            @if (User.IsInRole("Administrator"))
+                            {
+                                <a class="dropdown-item" asp-action="Index" asp-controller="Admin">Administrator</a>
+                            }
+                            <a class="dropdown-item" asp-action="Logout" asp-controller="Account">Logout</a>
+                        </div>
+                    </li>
+
+                }
+                else
+                {
+
+                    <li class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user-circle" aria-hidden="true"></i></a>
+
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" asp-action="Login" asp-controller="Account">
+                                <i class="fa fa-sign-in" style="color:red"></i>
+                                Login
+                            </a>
+                            <a class="dropdown-item" asp-action="Register" asp-controller="Account">
+                                <i class="fa fa-user"></i>
+                                Register
+                            </a>
+                        </div>
+                    </li>
+
+                }
+            </ul>
+        </div>
+    </nav>
+</div>
