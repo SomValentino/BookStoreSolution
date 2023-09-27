@@ -1,18 +1,15 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
+using GemSpaceIdentityServer.Middleware;
 using IdentityServer.Data.DbContext;
+using IdentityServer.Middleware;
 using IdentityServer.Models;
 using IdentityServer.Services;
 using IdentityServer.Services.Interfaces;
-using IdentityServer4.EntityFramework.Entities;
 using IdentityServer4.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -91,6 +88,8 @@ namespace GemSpaceIdentityServer
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseAdminUser();
+                app.UseClient();
             }
             else
             {

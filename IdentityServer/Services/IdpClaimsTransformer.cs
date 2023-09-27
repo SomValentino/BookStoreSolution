@@ -33,8 +33,7 @@ namespace IdentityServer.Services
             claims.AddRange(new List<Claim>(){
                     new Claim(JwtClaimTypes.Subject,user.Id),
                     new Claim(JwtClaimTypes.PreferredUserName, user.UserName),
-                    new Claim(JwtRegisteredClaimNames.UniqueName, user.UserName),
-                    new Claim(JwtClaimTypes.Email, user.Email)
+                    new Claim(JwtRegisteredClaimNames.UniqueName, user.UserName)
                });
 
             claims.AddRange(roles.Select(role => new Claim(JwtClaimTypes.Role, role)));
