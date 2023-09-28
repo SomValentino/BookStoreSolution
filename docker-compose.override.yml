@@ -1,8 +1,8 @@
 version: '3.4'
 
 services:
-  identitydb:
-    container_name: identitydb
+  identitydb2:
+    container_name: identitydb2
     environment:
       - SA_PASSWORD=Pass#word1
       - ACCEPT_EULA=Y
@@ -14,15 +14,18 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+:443;http://+:80
-      - "ConnectionStrings__IdentityProviderConnection=Server=identitydb;Initial Catalog=IdentityDB;Persist Security Info=False;User ID=sa;Password=Pass#word1;MultipleActiveResultSets=False;TrustServerCertificate=true;Connection Timeout=130;"
+      - "ConnectionStrings__IdentityProviderConnection=Server=identitydb2;Initial Catalog=IdentityServerDb;Persist Security Info=False;User ID=sa;Password=Pass#word1;MultipleActiveResultSets=False;TrustServerCertificate=true;Connection Timeout=130;"
       - TokenLifetimeMinutes=2000
       - PermanentTokenLifetimeDays=500
       - CookieLifeTime=2
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=Pass#word1
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
     ports:
-      - 5000:443
+      - 5044:443
     depends_on: 
-      - identitydb
+      - identitydb2
     volumes:
-      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
-      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+      #- ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      #- ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+      - ~/.aspnet/https:/https:ro
       - ./IdentityServer/wwwroot:/app/wwwroot

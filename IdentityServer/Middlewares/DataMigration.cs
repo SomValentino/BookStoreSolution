@@ -20,7 +20,7 @@ namespace IdentityServer.Middleware
             var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationUserDbContext>();
             var configuration = scope.ServiceProvider.GetRequiredService<IConfiguration>();
 
-            var model = new RegisterInputViewModel { Username = "valazom",
+            var model = new RegisterInputViewModel { Username = "adminuser",
                 Email = configuration["AdminEmail"], Password = configuration["AdminPassword"]
             };
 

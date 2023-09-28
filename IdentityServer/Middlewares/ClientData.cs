@@ -9,7 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace GemSpaceIdentityServer.Middleware
+namespace IdentityServer.Middleware
 {
     public static class ClientData
     {

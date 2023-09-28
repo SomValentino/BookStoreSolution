@@ -1,8 +1,7 @@
 using System;
 using System.Reflection;
-using GemSpaceIdentityServer.Middleware;
-using IdentityServer.Data.DbContext;
 using IdentityServer.Middleware;
+using IdentityServer.Data.DbContext;
 using IdentityServer.Models;
 using IdentityServer.Services;
 using IdentityServer.Services.Interfaces;
@@ -16,7 +15,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace GemSpaceIdentityServer
+namespace IdentityServer
 {
     public class Startup
     {
