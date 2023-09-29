@@ -6,6 +6,8 @@ namespace BookCatalog.API.Data.Configuration;
 
 public class BookCatalogConfiguration : IEntityTypeConfiguration<Book>{
     public void Configure(EntityTypeBuilder<Book> BookBuilder){
-
+        BookBuilder.HasMany(_ => _.Authors)
+                   .WithMany(_ => _.Books);
+                
     }
 }
