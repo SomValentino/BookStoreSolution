@@ -10,7 +10,12 @@ services:
     image: ${DOCKER_REGISTRY-}identityserver
     build:
       context: .
-      dockerfile: IdentityServer/Dockerfile
+      dockerfile: ./IdentityServer/Dockerfile
+  purchasetokenapi:
+    image: ${DOCKER_REGISTRY-}purchasetokenapi
+    build:
+      context: .
+      dockerfile: ./Purchasetoken.API/Dockerfile
 
 volumes:
-  mongo_data:
+  pushtokendb_mongo_data:

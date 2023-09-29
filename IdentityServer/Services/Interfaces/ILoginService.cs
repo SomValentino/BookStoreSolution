@@ -27,5 +27,7 @@ namespace IdentityServer.Services.Interfaces
 
         Task RefreshSignInAsync(ApplicationUser applicationUser);
 
+        Task UpdateUserAsync(ApplicationUser applicationUser);
+
     }
 }

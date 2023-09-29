@@ -43,7 +43,7 @@ namespace IdentityServer {
                 .AddDefaultTokenProviders ();
 
             services.AddIdentityServer (x => {
-                    x.IssuerUri = "https:localhost:5001";
+                    x.IssuerUri = "http://identityserver";
                     x.Authentication.CookieLifetime = TimeSpan.FromHours (Configuration.GetValue<int> ("CookieLifeTime"));
                 })
                 .AddDeveloperSigningCredential ()
@@ -74,6 +74,7 @@ namespace IdentityServer {
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure (IApplicationBuilder app, IWebHostEnvironment env) {
+            app.DataMigrate ();
             if (env.IsDevelopment ()) {
                 app.UseDeveloperExceptionPage ();
                 app.UseAdminUser ();

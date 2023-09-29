@@ -129,9 +129,9 @@ namespace IdentityServerHost.Quickstart.UI.Controllers {
                     var isuser = new IdentityServerUser (user.Id) {
                         DisplayName = user.UserName
                     };
-                    //await HttpContext.SignInAsync (isuser, props);
-                    //await _loginService.UpdateSecurityManagerAsync(user);
-                    //await _loginService.RefreshSignInAsync(user);
+
+                    user.IsActive = true;
+                    await _loginService.UpdateUserAsync (user);
 
                     if (context != null) {
                         if (context.IsNativeClient ()) {
@@ -283,9 +283,15 @@ namespace IdentityServerHost.Quickstart.UI.Controllers {
 
             if (User?.Identity.IsAuthenticated == true) {
                 // delete local authentication cookie
+                var user = await _loginService.FindByUserClaims (User);
                 await HttpContext.SignOutAsync ();
 
-                // raise the logout event
+                if (user != null) {
+                    user.IsActive = false;
+                    await _loginService.UpdateUserAsync(user);
+                }
+
+                    // raise the logout event
                 await _events.RaiseAsync (new UserLogoutSuccessEvent (User.GetSubjectId (), User.GetDisplayName ()));
             }
 

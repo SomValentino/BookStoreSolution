@@ -68,6 +68,11 @@ namespace IdentityServer.Services
             await _userManager.UpdateSecurityStampAsync(applicationUser);
         }
 
+        public async Task UpdateUserAsync(ApplicationUser applicationUser)
+        {
+            await _userManager.UpdateAsync(applicationUser);
+        }
+
         public async Task<bool> ValidateCredentials(string email, string password, bool rememberMe,bool lockoutOnfailure =false)
         {
             var result = await _signInManager.PasswordSignInAsync(email,password,rememberMe,lockoutOnfailure);

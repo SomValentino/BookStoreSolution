@@ -1,9 +1,11 @@
+using Microsoft.IdentityModel.Logging;
 using PurchaseToken.API.Data;
 using PurchaseToken.API.Data.Interfaces;
 using PurchaseToken.API.Data.Repository;
 using PurchaseToken.API.Data.Repository.Interfaces;
 
 var builder = WebApplication.CreateBuilder (args);
+IdentityModelEventSource.ShowPII = true;
 
 // Add services to the container.
 builder.Services.AddScoped<ITokenAccountContext, TokenAccountContext> ();
@@ -35,8 +37,6 @@ if (app.Environment.IsDevelopment ()) {
     app.UseSwagger ();
     app.UseSwaggerUI ();
 }
-
-app.UseHttpsRedirection ();
 
 app.UseAuthentication ();
 

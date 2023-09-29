@@ -84,17 +84,8 @@ namespace IdentityServer.Services {
             context.IsActive = false;
 
             if (user != null) {
-                var security_stamp_changed = false;
-                if (_userManager.SupportsUserSecurityStamp) {
-                    var security_stamp = subject.Claims.Where (c => c.Type == "security_stamp")
-                        .Select (c => c.Value).SingleOrDefault ();
-                    if (security_stamp != null) {
-                        var latest_security_stamp = await _userManager.GetSecurityStampAsync (user);
-                        security_stamp_changed = security_stamp != latest_security_stamp;
-                    }
-                }
-
-                context.IsActive = !security_stamp_changed && !await _userManager.IsLockedOutAsync (user);
+                
+                context.IsActive = user.IsActive;
             }
         }
     }
