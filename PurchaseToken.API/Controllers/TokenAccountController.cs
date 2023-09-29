@@ -1,5 +1,4 @@
 using System.Runtime.CompilerServices;
-using System.Security.Claims;
 using IdentityModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,7 +13,7 @@ namespace PurchaseToken.API.Controllers;
 public class TokenAccountController : ControllerBase {
     private readonly ITokenAccountRepository _tokenAccountRepository;
 
-    private string UserId => User.Claims.FirstOrDefault (_ => _.Type == ClaimTypes.NameIdentifier) !.Value;
+    private string UserId => User.Claims.FirstOrDefault (_ => _.Type == JwtClaimTypes.Subject) !.Value;
 
     public TokenAccountController (ITokenAccountRepository tokenAccountRepository) {
         _tokenAccountRepository = tokenAccountRepository;

@@ -43,7 +43,7 @@ namespace IdentityServer {
                 .AddDefaultTokenProviders ();
 
             services.AddIdentityServer (x => {
-                    x.IssuerUri = "http://identityserver";
+                    x.IssuerUri = "https://identityserver";
                     x.Authentication.CookieLifetime = TimeSpan.FromHours (Configuration.GetValue<int> ("CookieLifeTime"));
                 })
                 .AddDeveloperSigningCredential ()
