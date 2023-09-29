@@ -4,8 +4,13 @@ services:
   identitydb2:
     image: mcr.microsoft.com/mssql/server:2019-latest
     container_name: identitydb2
+  pushtokendb:
+    image: mongo
   identityserver:
     image: ${DOCKER_REGISTRY-}identityserver
     build:
       context: .
       dockerfile: IdentityServer/Dockerfile
+
+volumes:
+  mongo_data:

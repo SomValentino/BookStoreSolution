@@ -48,6 +48,11 @@ namespace IdentityServer.Services
             return await _userManager.FindByNameAsync(user);
         }
 
+        public async Task RefreshSignInAsync(ApplicationUser applicationUser)
+        {
+            await _signInManager.RefreshSignInAsync(applicationUser);
+        }
+
         public Task SignIn(ApplicationUser user)
         {
             return _signInManager.SignInAsync(user, true);
@@ -58,9 +63,16 @@ namespace IdentityServer.Services
             return _signInManager.SignInAsync(user, properties, authenticationMethod);
         }
 
-        public Task<bool> ValidateCredentials(ApplicationUser user, string password)
+        public async Task UpdateSecurityManagerAsync(ApplicationUser applicationUser)
         {
-            return _userManager.CheckPasswordAsync(user, password);
+            await _userManager.UpdateSecurityStampAsync(applicationUser);
+        }
+
+        public async Task<bool> ValidateCredentials(string email, string password, bool rememberMe,bool lockoutOnfailure =false)
+        {
+            var result = await _signInManager.PasswordSignInAsync(email,password,rememberMe,lockoutOnfailure);
+
+            return result.Succeeded;
         }
 
         

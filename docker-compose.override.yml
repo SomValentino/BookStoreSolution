@@ -10,6 +10,15 @@ services:
       - "1433:1433"
     volumes:
       - ./sql:/var/opt/mssql/data
+      
+  pushtokendb:
+    container_name: pushtokendb
+    restart: always
+    ports:
+        - "27017:27017"
+    volumes:
+        - mongo_data:/data/db
+
   identityserver:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
