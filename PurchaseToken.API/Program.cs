@@ -6,6 +6,8 @@ using PurchaseToken.API.Data;
 using PurchaseToken.API.Data.Interfaces;
 using PurchaseToken.API.Data.Repository;
 using PurchaseToken.API.Data.Repository.Interfaces;
+using BookStore.Helpers.Extensions;
+using PurchaseToken.API.Extensions;
 
 var builder = WebApplication.CreateBuilder (args);
 IdentityModelEventSource.ShowPII = true;
@@ -14,6 +16,7 @@ IdentityModelEventSource.ShowPII = true;
 builder.Services.AddScoped<ITokenAccountContext, TokenAccountContext> ();
 builder.Services.AddScoped<ITokenAccountRepository, TokenAccountRepository> ();
 builder.Services.AddControllers ();
+builder.Services.AddCorrelationIdGeneratorService();
 
 builder.Services.AddAuthentication (IdentityServerAuthenticationDefaults.AuthenticationScheme)
     .AddOAuth2Introspection (options => {
@@ -23,30 +26,32 @@ builder.Services.AddAuthentication (IdentityServerAuthenticationDefaults.Authent
     });
 
 builder.Services.AddHttpClient (OAuth2IntrospectionDefaults.BackChannelHttpClientName)
-    .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler{
+    .ConfigurePrimaryHttpMessageHandler (() => new HttpClientHandler {
         ServerCertificateCustomValidationCallback = (_, _, _, _) => true
     });
 
-        builder.Services.AddAuthorization (options => {
-            options.AddPolicy ("ScopePolicy", policy => {
-                policy.RequireClaim ("scope", builder.Configuration.GetValue<string> ("ScopeName") !);
-            });
-        });
-        // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-        builder.Services.AddEndpointsApiExplorer (); builder.Services.AddSwaggerGen ();
+builder.Services.AddAuthorization (options => {
+    options.AddPolicy ("ScopePolicy", policy => {
+        policy.RequireClaim ("scope", builder.Configuration.GetValue<string> ("ScopeName") !);
+    });
+});
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddEndpointsApiExplorer ();
+builder.Services.AddSwaggerGen ();
 
-        var app = builder.Build ();
+var app = builder.Build ();
 
-        // Configure the HTTP request pipeline.
-        if (app.Environment.IsDevelopment ()) {
-            app.UseSwagger ();
-            app.UseSwaggerUI ();
-        }
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment ()) {
+    app.UseSwagger ();
+    app.UseSwaggerUI ();
+}
 
-        app.UseAuthentication ();
+app.UseCorrelationIdMiddleware();
+app.UseAuthentication ();
 
-        app.UseAuthorization ();
+app.UseAuthorization ();
 
-        app.MapControllers ();
+app.MapControllers ();
 
-        app.Run ();
+app.Run ();

@@ -9,6 +9,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PurchaseToken.API", "Purcha
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookCatalog.API", "BookCatalog.API\BookCatalog.API.csproj", "{FD169F18-C616-4A31-9355-C8B7F8952112}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{3A582BF7-7BB1-4844-B131-31072CCA22CB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookStore.Helpers", "Common\BookStore.Helpers\BookStore.Helpers.csproj", "{82C3B067-508A-4B42-8C33-00676C8A3922}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,11 +31,18 @@ Global
 		{FD169F18-C616-4A31-9355-C8B7F8952112}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FD169F18-C616-4A31-9355-C8B7F8952112}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FD169F18-C616-4A31-9355-C8B7F8952112}.Release|Any CPU.Build.0 = Release|Any CPU
+		{82C3B067-508A-4B42-8C33-00676C8A3922}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82C3B067-508A-4B42-8C33-00676C8A3922}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82C3B067-508A-4B42-8C33-00676C8A3922}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82C3B067-508A-4B42-8C33-00676C8A3922}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {79E454CA-0A21-4FCF-A6C0-9642D851FFC1}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{82C3B067-508A-4B42-8C33-00676C8A3922} = {3A582BF7-7BB1-4844-B131-31072CCA22CB}
 	EndGlobalSection
 EndGlobal

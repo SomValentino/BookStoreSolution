@@ -4,13 +4,24 @@ services:
   identitydb2:
     image: mcr.microsoft.com/mssql/server:2019-latest
     container_name: identitydb2
+
   pushtokendb:
     image: mongo
+
+  bookcatalogdb:
+      container_name: bookcatalogdb
+      image: postgres:14
+
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4:6.12
+
   identityserver:
     image: ${DOCKER_REGISTRY-}identityserver
     build:
       context: .
       dockerfile: ./IdentityServer/Dockerfile
+
   purchasetokenapi:
     image: ${DOCKER_REGISTRY-}purchasetokenapi
     build:
@@ -19,3 +30,4 @@ services:
 
 volumes:
   pushtokendb_mongo_data:
+  bookcatalogdb_data:
