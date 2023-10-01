@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace BookCatalog.API.Controllers;
 
 [ApiController]
-[Authorize]
+//[Authorize]
 [Route ("[controller]")]
 public class AuthorsController : ControllerBase {
     private readonly IAuthorService _authorService;
@@ -43,7 +43,7 @@ public class AuthorsController : ControllerBase {
 
         author = await _authorService.CreateAuthorAsync (author);
 
-        return CreatedAtAction ("GetAuthor", author, new { id = author.AuthorId });
+        return CreatedAtAction ("GetAuthor", new { id = author.AuthorId }, author);
     }
 
     [HttpPut ("{id}")]
@@ -60,7 +60,7 @@ public class AuthorsController : ControllerBase {
         return NoContent ();
     }
 
-    [HttpPut ("{id}")]
+    [HttpDelete ("{id}")]
     public async Task<IActionResult> DeleteAuthor (Guid id) {
         var author = await _authorService.GetAuthorByIdAsync (id);
 

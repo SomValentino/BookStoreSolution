@@ -1,23 +1,24 @@
 using BookCatalog.API.Data;
+using BookCatalog.API.Data.Repository;
 using BookCatalog.API.Models;
+using BookCatalog.API.Models.Specification;
 using BookCatalog.API.Services.interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace BookCatalog.API.Services;
 
 public class BookCatalogService : IBookCatalogService {
-    private readonly BookDbContext _bookDbContext;
+    private readonly IRepository<Book> _bookRepository;
     private readonly ILogger<BookCatalogService> _logger;
 
-    public BookCatalogService (BookDbContext bookDbContext, ILogger<BookCatalogService> logger) {
-        _bookDbContext = bookDbContext;
+    public BookCatalogService (IRepository<Book> bookRepository, ILogger<BookCatalogService> logger) {
+        _bookRepository = bookRepository;
         _logger = logger;
     }
     public async Task<Book> CreateBookAsync (Book book) {
-        using var transaction = _bookDbContext.Database.BeginTransaction ();
+        using var transaction = _bookRepository.DbContext.Database.BeginTransaction ();
         try {
-            await _bookDbContext.AddAsync (book);
-            await _bookDbContext.SaveChangesAsync ();
+            await _bookRepository.AddAsync (book);
             transaction.Commit ();
             return book;
         } catch (System.Exception ex) {
@@ -28,11 +29,9 @@ public class BookCatalogService : IBookCatalogService {
     }
 
     public async Task DeleteBookAsync (Book book) {
-        using var transaction = _bookDbContext.Database.BeginTransaction ();
+        using var transaction = _bookRepository.DbContext.Database.BeginTransaction ();
         try {
-            _bookDbContext.Entry (book).State = EntityState.Deleted;
-            _bookDbContext.Books.Remove (book);
-            await _bookDbContext.SaveChangesAsync ();
+            await _bookRepository.DeleteAsync (book);
             transaction.Commit ();
         } catch (System.Exception ex) {
             transaction.Rollback ();
@@ -42,23 +41,23 @@ public class BookCatalogService : IBookCatalogService {
     }
 
     public async Task<Book> GetBookByIdAsync (Guid id) {
-        return await _bookDbContext.Books.FirstOrDefaultAsync (_ => _.BookId == id);
+        var book = await _bookRepository.GetBySpecAsync (new BookByIdSpec (id));
+
+        return book!;
     }
 
     public async Task<IEnumerable<Book>> GetBooksAsync (string? title = null) {
         if (string.IsNullOrEmpty (title)) {
-            return await _bookDbContext.Books.ToListAsync ();
+            return await _bookRepository.ListAsync (new BookSearchByTitleSpec (title!));
         }
 
-        return await _bookDbContext.Books.Where (_ => _.Title.Contains (title)).ToListAsync ();
+        return await _bookRepository.ListAsync ();
     }
 
     public async Task UpdateBookAsync (Book book) {
-        using var transaction = _bookDbContext.Database.BeginTransaction ();
+        using var transaction = _bookRepository.DbContext.Database.BeginTransaction ();
         try {
-            _bookDbContext.Entry (book).State = EntityState.Modified;
-            _bookDbContext.Books.Remove (book);
-            await _bookDbContext.SaveChangesAsync ();
+            await _bookRepository.UpdateAsync (book);
             transaction.Commit ();
         } catch (System.Exception ex) {
             transaction.Rollback ();

@@ -4,6 +4,7 @@ using BookStore.Helpers.Extensions;
 using BookCatalog.API.Extensions;
 using BookCatalog.API.Services.interfaces;
 using BookCatalog.API.Services;
+using BookCatalog.API.Data.Repository;
 
 var builder = WebApplication.CreateBuilder (args);
 
@@ -19,6 +20,7 @@ builder.Services.AddDbContext<BookDbContext> (options => {
 });
 builder.Services.AddCorrelationIdGeneratorService ();
 builder.Services.AddScoped<IBookCatalogService,BookCatalogService>();
+builder.Services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
 builder.Services.AddScoped<IAuthorService,AuthorService>();
 
 var app = builder.Build ();
