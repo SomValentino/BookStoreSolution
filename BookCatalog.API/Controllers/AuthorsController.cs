@@ -1,4 +1,5 @@
 using BookCatalog.API.Dtos;
+using BookCatalog.API.Extensions;
 using BookCatalog.API.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -6,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace BookCatalog.API.Controllers;
 
 [ApiController]
-//[Authorize]
+[Authorize]
 [Route ("[controller]")]
 public class AuthorsController : ControllerBase {
     private readonly IAuthorService _authorService;
@@ -21,16 +22,16 @@ public class AuthorsController : ControllerBase {
     public async Task<IActionResult> GetAuthors () {
         var authors = await _authorService.GetAuthorsAsync ();
 
-        return Ok (authors);
+        return Ok (authors.Select (_ => _.ToAuthorViewDto ()));
     }
 
     [HttpGet ("{id}", Name = "GetAuthor")]
     public async Task<IActionResult> GetAuthor (Guid id) {
-        var authors = await _authorService.GetAuthorByIdAsync (id);
+        var author = await _authorService.GetAuthorByIdAsync (id);
 
-        if (authors == null) return NotFound ();
+        if (author == null) return NotFound ();
 
-        return Ok (authors);
+        return Ok (author.ToAuthorViewDto ());
     }
 
     [HttpPost]
@@ -43,7 +44,9 @@ public class AuthorsController : ControllerBase {
 
         author = await _authorService.CreateAuthorAsync (author);
 
-        return CreatedAtAction ("GetAuthor", new { id = author.AuthorId }, author);
+        var authorViewDto = author.ToAuthorViewDto ();
+
+        return CreatedAtAction ("GetAuthor", new { id = authorViewDto.AuthorId }, authorViewDto);
     }
 
     [HttpPut ("{id}")]

@@ -47,11 +47,11 @@ public class BookCatalogService : IBookCatalogService {
     }
 
     public async Task<IEnumerable<Book>> GetBooksAsync (string? title = null) {
-        if (string.IsNullOrEmpty (title)) {
+        if (!string.IsNullOrEmpty (title)) {
             return await _bookRepository.ListAsync (new BookSearchByTitleSpec (title!));
         }
 
-        return await _bookRepository.ListAsync ();
+        return await _bookRepository.ListAsync (new BookWithAuthorsSpec());
     }
 
     public async Task UpdateBookAsync (Book book) {

@@ -68,10 +68,28 @@ services:
       - ConnectionString=mongodb://pushtokendb
       - DatabaseName=TokenAccountDb
       - CollectionName=TokenAccount
-      - ScopeName=GatewayScope"
+      - ScopeName=GatewayScope API
+      - client_secret=Pass#word1
+      - client_id=9b0444ee-91ac-4f6c-a5a3-e82aef9126b4
       - ASPNETCORE_Kestrel__Certificates__Default__Password=Pass#word1
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
     ports:
       - 5045:443
+    volumes:
+      - ~/.aspnet/https:/https:ro
+
+  bookcatalogapi:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - idp_url=https://identityserver
+      - ConnectionStrings__PostgreSQLConnection=Host=bookcatalogdb;Username=admin;Password=Pass#word1;Enlist=false;Database=BookCatalog
+      - ScopeName=GatewayScope API
+      - client_secret=Pass#word1
+      - client_id=2d4a5ab0-65d5-4c2e-8aaf-202d5f2f2df5
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=Pass#word1
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+    ports:
+      - 5046:443
     volumes:
       - ~/.aspnet/https:/https:ro

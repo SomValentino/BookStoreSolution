@@ -122,6 +122,13 @@
                             </div>
                         </div>
                         <div class="form-group">
+                            <label for="apiResourceSecret" class="col-sm-2 control-label">Api Resource Secret</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="apiResourceSecret"
+                                    placeholder="Api Resource Secret"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <label for="apiResourcescopes[]" class="col-sm-2 control-label">Scope</label>
                             <div class="col-sm-10">
                                 <select class="form-control" id="apiResourceScopeList" name="apiResourcescopes[]" multiple="multiple"></select>
@@ -166,6 +173,16 @@
                             <label for="clientId" class="col-sm-2 control-label">Client Id</label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" id="clientId" placeholder="Name" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="clientsecretclear" class="col-sm-2 control-label">Plain Secret</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="clientsecretclear" placeholder="secret text" disabled>
+                                <div class="spinner-border text-primary" role="status" id="idploader"
+                                    style="display:none">
+                                    <span class="sr-only">Loading...</span>
+                                </div>
                             </div>
                         </div>
                         <div class="form-group">
@@ -363,11 +380,14 @@
             $('#clientId').val(uuid)
         }
         const text = textValue + Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5)
+        
         $('#idploader').show()
         const textHash = sha256(text)
             .then(data => {
                 $('#clientsecret').val(data)
+                $('#clientsecretclear').val(text)
                 $('#idploader').hide()
+
             })
             .catch(error => {
                 console.log(error)
@@ -576,6 +596,7 @@
         const apiResourceName = $('#apiResourceName').val()
         const apiResourceDisplayName = $("#apiResourceDisplayName").val()
         const apiResourceDescription = $("#apiResourceDescription").val()
+        const apiResourceSecret = $("#apiResourceSecret").val()
         const apiResourceScopeList = $('#apiResourceScopeList').val()
         const apiResourceEnabled = $("#apiResourceEnabled").prop('checked')
         const apiResourceShowInDiscoveryDocument = $('#apiResourceShowInDiscoveryDocument').prop('checked')
@@ -585,6 +606,7 @@
         apiResourceFormData.set('name', apiResourceName || "")
         apiResourceFormData.set('displayName', apiResourceDisplayName || "")
         apiResourceFormData.set('description', apiResourceDescription || "")
+        apiResourceFormData.set('secret', apiResourceSecret || "")
         apiResourceFormData.set('scopeList', apiResourceScopeList ? JSON.stringify(apiResourceScopeList) : '[]')
         apiResourceFormData.set('enabled', apiResourceEnabled)
         apiResourceFormData.set('showInDiscoveryDocument', apiResourceShowInDiscoveryDocument)
@@ -609,7 +631,7 @@
                     }
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
-                    makeValidationNotification("Message", "Client was not created", "#BD5B5B", 'fa fa-exclamation-triangle')
+                    makeValidationNotification("Message", "Api resource was not created", "#BD5B5B", 'fa fa-exclamation-triangle')
                 }
             });
 

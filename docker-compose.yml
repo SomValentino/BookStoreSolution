@@ -28,6 +28,12 @@ services:
       context: .
       dockerfile: ./Purchasetoken.API/Dockerfile
 
+  bookcatalogapi:
+    image: ${DOCKER_REGISTRY-}bookcatalogapi
+    build:
+      context: .
+      dockerfile: ./BookCatalog.API/Dockerfile
+
 volumes:
   pushtokendb_mongo_data:
   bookcatalogdb_data:
