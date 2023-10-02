@@ -11,10 +11,17 @@ services:
   bookcatalogdb:
       container_name: bookcatalogdb
       image: postgres:14
+  
+  basketdb:
+    container_name: basketdb
+    image: redis:alpine
 
   pgadmin:
     container_name: pgadmin
     image: dpage/pgadmin4:6.12
+  
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
 
   identityserver:
     image: ${DOCKER_REGISTRY-}identityserver
@@ -33,6 +40,12 @@ services:
     build:
       context: .
       dockerfile: ./BookCatalog.API/Dockerfile
+  
+  basketapi:
+    image: ${DOCKER_REGISTRY-}basketapi
+    build:
+      context: .
+      dockerfile: ./Basket.API/Dockerfile
 
 volumes:
   pushtokendb_mongo_data:

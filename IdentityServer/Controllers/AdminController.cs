@@ -159,7 +159,7 @@ namespace IdentityServer.Controllers {
                 client.RefreshTokenUsage = 86000;
                 client.UpdateAccessTokenClaimsOnRefresh = true;
                 client.RefreshTokenExpiration = 86000;
-                client.AccessTokenType = (int) AccessTokenType.Jwt;
+                client.AccessTokenType = (int) AccessTokenType.Reference;
                 client.EnableLocalLogin = true;
                 client.IncludeJwtId = true;
                 client.AlwaysSendClientClaims = true;

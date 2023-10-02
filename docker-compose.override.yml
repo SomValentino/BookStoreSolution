@@ -30,6 +30,13 @@ services:
     volumes:
       - bookcatalogdb_data:/var/lib/postgresql/data
 
+  rabbitmq:
+    container_name: rabbitmq
+    restart: always
+    ports:
+        - "5672:5672"
+        - "15672:15672"
+
   pgadmin:
     depends_on:
       - bookcatalogdb
@@ -61,6 +68,7 @@ services:
       - ./IdentityServer/wwwroot:/app/wwwroot
 
   purchasetokenapi:
+    container_name: purchasetokenapi
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+:443;http://+:80
@@ -79,6 +87,7 @@ services:
       - ~/.aspnet/https:/https:ro
 
   bookcatalogapi:
+    container_name: bookcatalogapi
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+:443;http://+:80
@@ -91,5 +100,23 @@ services:
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
     ports:
       - 5046:443
+    volumes:
+      - ~/.aspnet/https:/https:ro
+
+  basketapi:
+    container_name:  basketapi
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - idp_url=https://identityserver
+      - ConnectionStrings=basketdb:6379
+      - ScopeName=GatewayScope API
+      - client_secret=Pass#word1
+      - client_id=c957b3d8-3638-4cdb-b4bf-99852dfdcc6f
+      - EventBusHostAddress=amqp://guest:guest@rabbitmq:5672
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=Pass#word1
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+    ports:
+      - 5047:443
     volumes:
       - ~/.aspnet/https:/https:ro
