@@ -32,10 +32,13 @@ public class BasketService : IBasketService {
             TotalPrice = shoppingCart.TotalPrice,
             FirstName = firstName,
             LastName = lastName,
-            EmailAddress = emailAddress
+            EmailAddress = emailAddress,
+            Items = shoppingCart.Items
         };
         // send checkout event to rabbitmq
         var eventMessage = _mapper.Map<BasketCheckoutEvent> (basketCheckout);
+
+        _logger.LogInformation("Sending order to eventbus:{order}", JsonConvert.SerializeObject (eventMessage));
 
         await Policy.Handle<Exception> ().WaitAndRetryAsync (5,
                 retryAttempt => TimeSpan.FromSeconds (Math.Pow (2, retryAttempt)),
@@ -45,6 +48,8 @@ public class BasketService : IBasketService {
                     _logger.LogInformation ("Retrying to publish payload in {timespan}", timespan);
                 })
             .ExecuteAsync (() => _publishEndpoint.Publish (eventMessage));
+        
+        _logger.LogInformation ("Sent order to eventbus");
 
         // remove the basket
         await _repository.DeleteBasket (userId);

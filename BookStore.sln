@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Basket.API", "Basket.API\Ba
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventBus.Messages", "Common\EventBus.Messages\EventBus.Messages.csproj", "{ED85BDF0-731C-4AE0-B2ED-411B9D03AFD4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Order.API", "Order.API\Order.API.csproj", "{F1D35243-1E24-43DB-B0A7-B51C20803ED4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +49,10 @@ Global
 		{ED85BDF0-731C-4AE0-B2ED-411B9D03AFD4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ED85BDF0-731C-4AE0-B2ED-411B9D03AFD4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ED85BDF0-731C-4AE0-B2ED-411B9D03AFD4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F1D35243-1E24-43DB-B0A7-B51C20803ED4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1D35243-1E24-43DB-B0A7-B51C20803ED4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1D35243-1E24-43DB-B0A7-B51C20803ED4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1D35243-1E24-43DB-B0A7-B51C20803ED4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

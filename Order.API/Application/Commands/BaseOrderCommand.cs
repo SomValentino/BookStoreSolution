@@ -1,13 +1,13 @@
-using Basket.API.Models.ShoppingCartAggregate;
+using EventBus.Messages.Events;
 
-namespace Basket.API.Models;
+namespace Order.API.Application.Commands;
 
-public class BasketCheckout {
+public class BaseOrderCommand {
     public string UserName { get; set; }
     public decimal TotalPrice { get; set; }
 
     public string FirstName { get; set; }
     public string LastName { get; set; }
     public string EmailAddress { get; set; }
-    public List<ShoppingCartItem> Items { get; set; }
+    public List<ShoppingItem> Items { get; set; }
 }
