@@ -28,37 +28,28 @@ public class AuthorizeOrderCommandHandler : IRequestHandler<AuthorizeOrderComman
     }
     public async Task<AuthorizeOrderViewDto> Handle (AuthorizeOrderCommand request, CancellationToken cancellationToken) {
         try {
-            Models.Order order;
-
             _logger.LogInformation ("Retreiving order from database");
 
-            if (!string.IsNullOrEmpty (request.OrderId)) {
-                order = await _orderRepository.GetOrderById (request.OrderId);
-                Guard.Against.Null (order, nameof (order));
-                if (order.OrderStatus != OrderStatus.Pending) {
-                    return new AuthorizeOrderViewDto {
+            Models.Order order = await _orderRepository.GetOrderById (request.OrderId);
+
+            Guard.Against.Null (order, nameof (order));
+
+            if (order.OrderStatus != OrderStatus.Pending) {
+                return new AuthorizeOrderViewDto {
                     OrderId = request.OrderId,
                     OrderStatus = order.OrderStatus,
-                    ErrorMessage = "Cannot not authorize order that is not in pending state"
-                    };
-                }
-            } else {
-                var userspendingFilter = BuildQuery (request);
-                var userOrders = await _orderRepository
-                    .GetOrdersByQuery (userspendingFilter, _ => _.CreatedAt, false, 1, 1);
-
-                order = userOrders.FirstOrDefault () !;
-                Guard.Against.Null (order, nameof (order));
+                    ErrorMessage = "Only pending orders can be authorized for payment"
+                };
             }
 
             _logger.LogInformation ("Retrieved order of id {id} from database", order.OrderId);
 
-            _logger.LogInformation ("Sending payment authorization to PurchaseToken API for user {user} and amount {amount}",
+            _logger.LogInformation ("Sending payment authorization to PurchaseToken API for userId {user} and amount {amount} BookPurchaseTokens",
                 order.UserId, order.TotalPrice);
 
             var paymentResponse = await _paymentGrpcClientService.Authorize (new Protos.PaymentRequest {
                 UserId = order.UserId,
-                    Amount = order.TotalPrice
+                Amount = order.TotalPrice
             });
 
             if (!paymentResponse.Status) {
@@ -68,8 +59,8 @@ public class AuthorizeOrderCommandHandler : IRequestHandler<AuthorizeOrderComman
 
                 return new AuthorizeOrderViewDto {
                     OrderId = order.OrderId,
-                        OrderStatus = order.OrderStatus,
-                        ErrorMessage = paymentResponse.ErrorMessage
+                    OrderStatus = order.OrderStatus,
+                    ErrorMessage = paymentResponse.ErrorMessage
                 };
             }
 
@@ -86,7 +77,7 @@ public class AuthorizeOrderCommandHandler : IRequestHandler<AuthorizeOrderComman
 
             return new AuthorizeOrderViewDto {
                 OrderId = order.OrderId,
-                    OrderStatus = order.OrderStatus
+                OrderStatus = order.OrderStatus
             };
         } catch (System.Exception ex) {
 

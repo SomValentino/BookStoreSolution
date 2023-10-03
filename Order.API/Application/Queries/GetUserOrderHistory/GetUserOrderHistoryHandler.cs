@@ -19,7 +19,8 @@ public class GetUserOrderHistoryHandler : IRequestHandler<GetUserOrderHistoryQue
     public async Task<List<OrderViewDto>> Handle (GetUserOrderHistoryQuery request, CancellationToken cancellationToken) {
         var query = BuildOrderQuery (request);
 
-        var orders = await _orderRepository.GetOrdersByQuery (query, _ => _.CreatedAt, false, request.Page, request.PageSize);
+        var orders = await _orderRepository.GetOrdersByQuery (query, _ => _.CreatedAt, false,
+                                     request.Page, request.PageSize);
 
         var ordersViewDto = orders.Select (_ => new OrderViewDto {
             OrderId = _.OrderId,
@@ -42,6 +43,12 @@ public class GetUserOrderHistoryHandler : IRequestHandler<GetUserOrderHistoryQue
 
     private static FilterDefinition<Models.Order> BuildOrderQuery (GetUserOrderHistoryQuery request) {
         var userQuery = Builders<Models.Order>.Filter.Eq (_ => _.UserId, request.UserId);
+
+        if (request.OrderStatus.HasValue) {
+            var orderStatusQuery = Builders<Models.Order>.Filter.Eq (_ => _.OrderStatus, request.OrderStatus);
+
+            userQuery = Builders<Models.Order>.Filter.And (userQuery, orderStatusQuery);
+        }
 
         if (request.StartDate.HasValue) {
             var startDateQuery = Builders<Models.Order>.Filter.Gte (_ => _.CreatedAt, request.StartDate);
