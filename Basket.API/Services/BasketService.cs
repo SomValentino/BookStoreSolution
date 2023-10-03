@@ -28,6 +28,7 @@ public class BasketService : IBasketService {
         string lastName, string emailAddress, ShoppingCart shoppingCart) {
 
         var basketCheckout = new BasketCheckout {
+            UserId = userId,
             UserName = username,
             TotalPrice = shoppingCart.TotalPrice,
             FirstName = firstName,

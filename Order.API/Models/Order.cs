@@ -6,6 +6,7 @@ namespace Order.API.Models;
 public class Order {
     [BsonId]
     public Guid OrderId { get; set; } = Guid.NewGuid();
+    public string UserId { get; set; }
     public string UserName { get; set; }
     public decimal TotalPrice { get; set; }
 
@@ -14,4 +15,6 @@ public class Order {
     public string EmailAddress { get; set; }
     public OrderStatus OrderStatus { get; set; } = OrderStatus.Pending;
     public List<ShoppingItem> Items { get; set; }
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime? UpdatedAt { get; set; }
 }

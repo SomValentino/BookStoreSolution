@@ -29,6 +29,11 @@ public class OrderRepository : IOrderRepository {
         return await _OrderContext.Orders.Find (_ => _.OrderId == orderId).FirstOrDefaultAsync ();
     }
 
+    public async Task<IEnumerable<Order.API.Models.Order>> GetOrdersByQuery(FilterDefinition<Order.API.Models.Order> filter)
+    {
+        return await _OrderContext.Orders.Find(filter).ToListAsync();
+    }
+
     public async Task<IEnumerable<Order.API.Models.Order>> GetOrdersByUsername (string username) {
         return await _OrderContext.Orders.Find (_ => _.UserName == username).ToListAsync ();
     }
