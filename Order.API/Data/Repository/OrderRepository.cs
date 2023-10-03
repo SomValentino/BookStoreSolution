@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using MongoDB.Driver;
 using Order.API.Data.Interfaces;
 using Order.API.Data.Repository.Interfaces;
@@ -19,7 +20,7 @@ public class OrderRepository : IOrderRepository {
     public async Task<bool> DeleteOrder (Order.API.Models.Order order) {
         var updateResult = await _OrderContext
             .Orders
-            .DeleteOneAsync(filter: g => g.OrderId == order.OrderId);
+            .DeleteOneAsync (filter: g => g.OrderId == order.OrderId);
 
         return updateResult.IsAcknowledged &&
             updateResult.DeletedCount > 0;
@@ -29,9 +30,29 @@ public class OrderRepository : IOrderRepository {
         return await _OrderContext.Orders.Find (_ => _.OrderId == orderId).FirstOrDefaultAsync ();
     }
 
-    public async Task<IEnumerable<Order.API.Models.Order>> GetOrdersByQuery(FilterDefinition<Order.API.Models.Order> filter)
+    public async Task<IEnumerable<Order.API.Models.Order>> GetOrdersByQuery (FilterDefinition<Order.API.Models.Order> filter) {
+        return await _OrderContext.Orders.Find (filter).ToListAsync ();
+    }
+
+    public async Task<IEnumerable<Models.Order>> GetOrdersByQuery (FilterDefinition<Models.Order> filter,
+        Expression<Func<Models.Order, object>> ? sort = null,
+        bool sortAscending = true,
+        int page = 1, int pageSize = 10)
     {
-        return await _OrderContext.Orders.Find(filter).ToListAsync();
+        var query = _OrderContext.Orders.Find (filter);
+
+        if (sort != null) {
+            if(sortAscending){
+                query = query.SortBy(sort);
+            }
+            else{
+                query = query.SortByDescending(sort);
+            }
+        }
+
+        query = query.Skip((page - 1)* pageSize).Limit(pageSize);
+
+        return await query.ToListAsync();
     }
 
     public async Task<IEnumerable<Order.API.Models.Order>> GetOrdersByUsername (string username) {

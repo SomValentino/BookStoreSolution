@@ -24,7 +24,7 @@ public class BookCatalogService : IBookCatalogService {
         } catch (System.Exception ex) {
             transaction.Rollback ();
             _logger.LogError (ex, ex.Message);
-            throw;
+            return default!;
         }
     }
 
@@ -36,7 +36,6 @@ public class BookCatalogService : IBookCatalogService {
         } catch (System.Exception ex) {
             transaction.Rollback ();
             _logger.LogError (ex, ex.Message);
-            throw;
         }
     }
 
@@ -46,12 +45,18 @@ public class BookCatalogService : IBookCatalogService {
         return book!;
     }
 
+    public async Task<IEnumerable<Book>> GetBookByIdsAsync (IEnumerable<Guid> ids) {
+        var books = await _bookRepository.ListAsync (new BookByIdsSpec (ids));
+
+        return books;
+    }
+
     public async Task<IEnumerable<Book>> GetBooksAsync (string? title = null) {
         if (!string.IsNullOrEmpty (title)) {
             return await _bookRepository.ListAsync (new BookSearchByTitleSpec (title!));
         }
 
-        return await _bookRepository.ListAsync (new BookWithAuthorsSpec());
+        return await _bookRepository.ListAsync (new BookWithAuthorsSpec ());
     }
 
     public async Task UpdateBookAsync (Book book) {
@@ -62,7 +67,17 @@ public class BookCatalogService : IBookCatalogService {
         } catch (System.Exception ex) {
             transaction.Rollback ();
             _logger.LogError (ex, ex.Message);
-            throw;
+        }
+    }
+
+    public async Task UpdateBookAsync (IEnumerable<Book> book) {
+        using var transaction = _bookRepository.DbContext.Database.BeginTransaction ();
+        try {
+            await _bookRepository.UpdateRangeAsync (book);
+            transaction.Commit ();
+        } catch (System.Exception ex) {
+            transaction.Rollback ();
+            _logger.LogError (ex, ex.Message);
         }
     }
 }

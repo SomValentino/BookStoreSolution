@@ -1,12 +1,15 @@
 using System.Text.Json;
 using BookCatalog.API.Data;
 using BookCatalog.API.Data.Repository;
+using BookCatalog.API.Events;
 using BookCatalog.API.Extensions;
 using BookCatalog.API.Services;
 using BookCatalog.API.Services.interfaces;
 using BookStore.Helpers.Extensions;
+using EventBus.Messages.Common;
 using IdentityModel.AspNetCore.OAuth2Introspection;
 using IdentityServer4.AccessTokenValidation;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
@@ -67,6 +70,21 @@ builder.Services.AddCorrelationIdGeneratorService ();
 builder.Services.AddScoped<IBookCatalogService, BookCatalogService> ();
 builder.Services.AddScoped (typeof (IRepository<>), typeof (EfRepository<>));
 builder.Services.AddScoped<IAuthorService, AuthorService> ();
+builder.Services.AddScoped<OrderStatusConfirmedEventConsumer>();
+
+builder.Services.AddMassTransit (config => {
+
+    config.AddConsumer<OrderStatusConfirmedEventConsumer> ();
+
+    config.UsingRabbitMq ((ctx, cfg) => {
+        cfg.Host (builder.Configuration["EventBusHostAddress"]);
+
+        cfg.ReceiveEndpoint (EventBusConstants.OrderStatusConfirmedQueue, c => {
+            c.ConfigureConsumer<OrderStatusConfirmedEventConsumer> (ctx);
+        });
+    });
+});
+builder.Services.AddMassTransitHostedService ();
 
 var app = builder.Build ();
 using var scope = app.Services.CreateScope ();

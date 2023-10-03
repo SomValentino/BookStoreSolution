@@ -3,6 +3,7 @@ using AutoMapper;
 using IdentityModel;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Order.API.Application.Commands.AuthorizeOrder;
 using Order.API.Application.Queries.GetOrder;
 using Order.API.Application.Queries.GetUserOrderHistory;
 using Order.API.Dto;
@@ -23,27 +24,40 @@ public class OrderController : ControllerBase {
         _logger = logger;
     }
 
-    [HttpGet ("{orderId}",Name = "getOrder")]
+    [HttpGet ("{orderId}", Name = "getOrder")]
     [ProducesResponseType ((int) HttpStatusCode.OK)]
-    public async Task<ActionResult<int>> GetOrder (string orderId) {
-        var result = await _mediator.Send (new GetOrderByIdQuery{
+    public async Task<IActionResult> GetOrder (string orderId) {
+        var result = await _mediator.Send (new GetOrderByIdQuery {
             OrderId = orderId
         });
         return Ok (result);
     }
 
-    [HttpGet ("history",Name = "getUserOrderHistory")]
+    [HttpGet ("history", Name = "getUserOrderHistory")]
     [ProducesResponseType ((int) HttpStatusCode.OK)]
-    public async Task<ActionResult<int>> GetUserOrder (int page = 1, int pageSize = 10,
-                    DateTime? startDate=null, DateTime? endDate= null) {
-        
-        var result = await _mediator.Send (new GetUserOrderHistoryQuery{
+    public async Task<IActionResult> GetUserOrder (int page = 1, int pageSize = 10,
+        DateTime? startDate = null, DateTime? endDate = null) {
+
+        var result = await _mediator.Send (new GetUserOrderHistoryQuery {
             UserId = UserId,
-            StartDate = startDate,
-            EndDate = endDate,
-            Page = 1,
-            PageSize = pageSize
+                StartDate = startDate,
+                EndDate = endDate,
+                Page = 1,
+                PageSize = pageSize
         });
+        return Ok (result);
+    }
+
+    [HttpPost ("authorize")]
+    [ProducesResponseType ((int) HttpStatusCode.OK)]
+    public async Task<IActionResult> Authorize ([FromBody] AuthorizeOrderRecord authorizeOrderRecord) {
+        var authorizeOrderCommand = new AuthorizeOrderCommand {
+            OrderId = authorizeOrderRecord.OrderId,
+            UserId = UserId
+        };
+
+        var result = await _mediator.Send (authorizeOrderCommand);
+
         return Ok (result);
     }
 }

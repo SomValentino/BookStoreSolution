@@ -80,6 +80,10 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+:443;http://+:80
+      - Kestrel__Endpoints__HTTP__Url=https://purchasetokenapi:443
+      - Kestrel__Endpoints__GRPC__Url=http://purchasetokenapi:81
+      - Kestrel__Endpoints__GRPC__Protocols=Http2
+      - Kestrel__Endpoints__HTTP__Protocols=Http1
       - idp_url=https://identityserver
       - ConnectionString=mongodb://pushtokendb
       - DatabaseName=TokenAccountDb
@@ -91,6 +95,7 @@ services:
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
     ports:
       - 5045:443
+      - 9045:81
     volumes:
       - ~/.aspnet/https:/https:ro
 
@@ -104,6 +109,7 @@ services:
       - ScopeName=GatewayScope API
       - client_secret=Pass#word1
       - client_id=2d4a5ab0-65d5-4c2e-8aaf-202d5f2f2df5
+      - EventBusHostAddress=amqp://guest:guest@rabbitmq:5672
       - ASPNETCORE_Kestrel__Certificates__Default__Password=Pass#word1
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
     ports:
@@ -140,6 +146,7 @@ services:
       - client_secret=Pass#word1
       - client_id=76c89beb-1899-4527-9a72-e6092276d884
       - EventBusHostAddress=amqp://guest:guest@rabbitmq:5672
+      - PurchaseTokenGrpcUrl=http://purchasetokenapi:81
       - ASPNETCORE_Kestrel__Certificates__Default__Password=Pass#word1
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
     ports:

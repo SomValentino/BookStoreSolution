@@ -19,15 +19,14 @@ public class GetUserOrderHistoryHandler : IRequestHandler<GetUserOrderHistoryQue
     public async Task<List<OrderViewDto>> Handle (GetUserOrderHistoryQuery request, CancellationToken cancellationToken) {
         var query = BuildOrderQuery (request);
 
-        var orders = await _orderRepository.GetOrdersByQuery (query);
+        var orders = await _orderRepository.GetOrdersByQuery (query, _ => _.CreatedAt, false, request.Page, request.PageSize);
 
-        var pagedOrders = orders.Skip ((request.Page - 1) * request.PageSize).Take (request.PageSize);
-
-        var ordersViewDto = pagedOrders.Select (_ => new OrderViewDto {
+        var ordersViewDto = orders.Select (_ => new OrderViewDto {
             OrderId = _.OrderId,
                 TotalPrice = _.TotalPrice,
                 FirstName = _.FirstName,
                 LastName = _.LastName,
+                OrderStatus = _.OrderStatus,
                 EmailAddress = _.EmailAddress,
                 Items = _.Items.Select (_ => new ShoppingItem {
                     Quantity = _.Quantity,

@@ -15,6 +15,8 @@ using Order.API.Data.Interfaces;
 using Order.API.Data.Repository;
 using Order.API.Data.Repository.Interfaces;
 using Order.API.Events;
+using Order.API.GrpcClient;
+using Order.API.Protos;
 
 var builder = WebApplication.CreateBuilder (args);
 
@@ -62,6 +64,9 @@ builder.Services.AddAuthentication (IdentityServerAuthenticationDefaults.Authent
     });
 
 builder.Services.AddCorrelationIdGeneratorService ();
+builder.Services.AddGrpcClient<PaymentProtoService.PaymentProtoServiceClient>
+    (o => o.Address = new Uri (builder.Configuration.GetValue<string>("PurchaseTokenGrpcUrl")));
+builder.Services.AddScoped<PaymentGrpcClientService>();
 
 builder.Services.AddHttpClient (OAuth2IntrospectionDefaults.BackChannelHttpClientName)
     .ConfigurePrimaryHttpMessageHandler (() => new HttpClientHandler {
@@ -99,7 +104,7 @@ if (app.Environment.IsDevelopment ()) {
         c.OAuthClientId (builder.Configuration.GetValue<string> ("client_id"));
     });
 }
-app.UseCorrelationIdMiddleware();
+app.UseCorrelationIdMiddleware ();
 app.UseHttpsRedirection ();
 app.UseAuthentication ();
 app.UseAuthorization ();

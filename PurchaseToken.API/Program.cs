@@ -10,6 +10,7 @@ using PurchaseToken.API.Data.Interfaces;
 using PurchaseToken.API.Data.Repository;
 using PurchaseToken.API.Data.Repository.Interfaces;
 using PurchaseToken.API.Extensions;
+using PurchaseToken.API.GrpcService;
 
 var builder = WebApplication.CreateBuilder (args);
 IdentityModelEventSource.ShowPII = true;
@@ -19,6 +20,7 @@ builder.Services.AddScoped<ITokenAccountContext, TokenAccountContext> ();
 builder.Services.AddScoped<ITokenAccountRepository, TokenAccountRepository> ();
 builder.Services.AddControllers ();
 builder.Services.AddCorrelationIdGeneratorService ();
+builder.Services.AddGrpc ();
 
 builder.Services.AddAuthentication (IdentityServerAuthenticationDefaults.AuthenticationScheme)
     .AddOAuth2Introspection (options => {
@@ -86,5 +88,6 @@ app.UseAuthentication ();
 app.UseAuthorization ();
 
 app.MapControllers ();
+app.MapGrpcService<PaymentGrpcService>();
 
 app.Run ();
