@@ -3,7 +3,7 @@ using Order.API.Data.Interfaces;
 using Order.API.Data.Repository.Interfaces;
 using Order.API.Models;
 
-namespace PurchaseToken.API.Data.Repository;
+namespace Order.API.Data.Repository;
 
 public class OrderRepository : IOrderRepository {
     private readonly IOrderContext _OrderContext;
@@ -25,7 +25,7 @@ public class OrderRepository : IOrderRepository {
             updateResult.DeletedCount > 0;
     }
 
-    public async Task<Order.API.Models.Order> GetOrderById (Guid orderId) {
+    public async Task<Order.API.Models.Order> GetOrderById (string orderId) {
         return await _OrderContext.Orders.Find (_ => _.OrderId == orderId).FirstOrDefaultAsync ();
     }
 

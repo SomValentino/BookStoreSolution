@@ -4,7 +4,7 @@ using Order.API.Models;
 namespace Order.API.Application.Queries;
 
 public record OrderViewDto {
-    public Guid OrderId { get; set; }
+    public string OrderId { get; set; }
     public long TotalPrice { get; set; }
 
     public string FirstName { get; set; }

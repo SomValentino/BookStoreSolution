@@ -8,6 +8,9 @@ services:
   pushtokendb:
     image: mongo
 
+  orderdb:
+    image: mongo
+
   bookcatalogdb:
       container_name: bookcatalogdb
       image: postgres:14
@@ -46,7 +49,14 @@ services:
     build:
       context: .
       dockerfile: ./Basket.API/Dockerfile
+  
+  orderapi:
+    image: ${DOCKER_REGISTRY-}orderapi
+    build:
+      context: .
+      dockerfile: ./Order.API/Dockerfile
 
 volumes:
   pushtokendb_mongo_data:
+  orderdb_mongo_data:
   bookcatalogdb_data:

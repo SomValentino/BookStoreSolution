@@ -7,12 +7,10 @@ namespace Order.API.Application.Commands.UpdateOrder;
 
 public class UpdateOrderCommandHandler : IRequestHandler<UpdateOrderCommand> {
     private IOrderRepository _orderRepository;
-    private IMapper _mapper;
     private ILogger<UpdateOrderCommand> _logger;
 
-    public UpdateOrderCommandHandler (IOrderRepository orderRepository, IMapper mapper, ILogger<UpdateOrderCommand> logger) {
+    public UpdateOrderCommandHandler (IOrderRepository orderRepository, ILogger<UpdateOrderCommand> logger) {
         _orderRepository = orderRepository;
-        _mapper = mapper;
         _logger = logger;
     }
     public async Task<Unit> Handle (UpdateOrderCommand request, CancellationToken cancellationToken) 
@@ -23,7 +21,9 @@ public class UpdateOrderCommandHandler : IRequestHandler<UpdateOrderCommand> {
             throw new NotFoundException (nameof (order), request.OrderId);
         }
 
-        _mapper.Map (request, order, typeof (UpdateOrderCommand), typeof (Order.API.Models.Order));
+        order.TotalPrice = request.TotalPrice;
+        order.Items =request.Items;
+        order.OrderStatus = request.OrderStatus;
 
         await _orderRepository.UpdateOrder (order);
 

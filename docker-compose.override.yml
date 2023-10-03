@@ -19,6 +19,14 @@ services:
     volumes:
       - pushtokendb_mongo_data:/data/db
 
+  orderdb:
+    container_name: orderdb
+    restart: always
+    ports:
+      - "27031:27017"
+    volumes:
+      - orderdb_mongo_data:/data/db
+
   bookcatalogdb:
     environment:
       - PGDATA=/var/lib/postgresql/data
@@ -118,5 +126,23 @@ services:
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
     ports:
       - 5047:443
+    volumes:
+      - ~/.aspnet/https:/https:ro
+
+  orderapi:
+    container_name:  orderapi
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - idp_url=https://identityserver
+      - ConnectionString=mongodb://orderdb
+      - ScopeName=GatewayScope API
+      - client_secret=Pass#word1
+      - client_id=76c89beb-1899-4527-9a72-e6092276d884
+      - EventBusHostAddress=amqp://guest:guest@rabbitmq:5672
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=Pass#word1
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+    ports:
+      - 5048:443
     volumes:
       - ~/.aspnet/https:/https:ro

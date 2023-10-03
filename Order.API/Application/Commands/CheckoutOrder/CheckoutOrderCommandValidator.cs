@@ -3,6 +3,9 @@ using FluentValidation;
 namespace Order.API.Application.Commands.CheckoutOrder {
     public class CheckoutOrderCommandValidator : AbstractValidator<CheckoutOrderCommand> {
         public CheckoutOrderCommandValidator () {
+            RuleFor (p => p.UserId)
+                .NotEmpty ().WithMessage ("{UserId} is required.")
+                .NotNull ();
             RuleFor (p => p.UserName)
                 .NotEmpty ().WithMessage ("{UserName} is required.")
                 .NotNull ();

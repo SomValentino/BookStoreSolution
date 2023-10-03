@@ -13,31 +13,37 @@ namespace Order.API.Controllers;
 [Route ("[controller]")]
 public class OrderController : ControllerBase {
     private readonly IMediator _mediator;
-    private readonly IMapper _mapper;
     private readonly ILogger<OrderController> _logger;
 
     private string UserId => User.Claims.FirstOrDefault (_ => _.Type == JwtClaimTypes.Subject) !.Value;
 
     public OrderController (IMediator mediator,
-        IMapper mapper,
         ILogger<OrderController> logger) {
         _mediator = mediator;
-        _mapper = mapper;
         _logger = logger;
     }
 
-    [HttpGet (Name = "getOrder")]
+    [HttpGet ("{orderId}",Name = "getOrder")]
     [ProducesResponseType ((int) HttpStatusCode.OK)]
-    public async Task<ActionResult<int>> GetOrder ([FromBody] GetOrderByIdQuery getOrderByIdQuery) {
-        var result = await _mediator.Send (getOrderByIdQuery);
+    public async Task<ActionResult<int>> GetOrder (string orderId) {
+        var result = await _mediator.Send (new GetOrderByIdQuery{
+            OrderId = orderId
+        });
         return Ok (result);
     }
 
-    [HttpGet (Name = "getUserOrderHistory")]
+    [HttpGet ("history",Name = "getUserOrderHistory")]
     [ProducesResponseType ((int) HttpStatusCode.OK)]
-    public async Task<ActionResult<int>> GetUserOrder ([FromBody] UserOrderHistoryRecord userOrderHistoryRecord) {
-        var getUserOrderHistoryQuery = _mapper.Map<GetUserOrderHistoryQuery> (userOrderHistoryRecord);
-        var result = await _mediator.Send (getUserOrderHistoryQuery);
+    public async Task<ActionResult<int>> GetUserOrder (int page = 1, int pageSize = 10,
+                    DateTime? startDate=null, DateTime? endDate= null) {
+        
+        var result = await _mediator.Send (new GetUserOrderHistoryQuery{
+            UserId = UserId,
+            StartDate = startDate,
+            EndDate = endDate,
+            Page = 1,
+            PageSize = pageSize
+        });
         return Ok (result);
     }
 }

@@ -1,4 +1,5 @@
 using AutoMapper;
+using EventBus.Messages.Events;
 using MediatR;
 using MongoDB.Driver;
 using Order.API.Data.Repository.Interfaces;
@@ -7,28 +8,37 @@ namespace Order.API.Application.Queries.GetUserOrderHistory;
 
 public class GetUserOrderHistoryHandler : IRequestHandler<GetUserOrderHistoryQuery, List<OrderViewDto>> {
     private readonly IOrderRepository _orderRepository;
-    private readonly IMapper _mapper;
     private readonly ILogger<GetUserOrderHistoryHandler> _logger;
 
     public GetUserOrderHistoryHandler (IOrderRepository orderRepository,
-        IMapper mapper,
         ILogger<GetUserOrderHistoryHandler> logger) {
         _orderRepository = orderRepository;
-        _mapper = mapper;
         _logger = logger;
 
     }
-    public async Task<List<OrderViewDto>> Handle (GetUserOrderHistoryQuery request, CancellationToken cancellationToken) 
-    {
+    public async Task<List<OrderViewDto>> Handle (GetUserOrderHistoryQuery request, CancellationToken cancellationToken) {
         var query = BuildOrderQuery (request);
 
         var orders = await _orderRepository.GetOrdersByQuery (query);
 
         var pagedOrders = orders.Skip ((request.Page - 1) * request.PageSize).Take (request.PageSize);
 
-        var ordersViewDto = _mapper.Map<List<OrderViewDto>> (pagedOrders);
+        var ordersViewDto = pagedOrders.Select (_ => new OrderViewDto {
+            OrderId = _.OrderId,
+                TotalPrice = _.TotalPrice,
+                FirstName = _.FirstName,
+                LastName = _.LastName,
+                EmailAddress = _.EmailAddress,
+                Items = _.Items.Select (_ => new ShoppingItem {
+                    Quantity = _.Quantity,
+                        Price = _.Price,
+                        BookId = _.BookId,
+                        BookTitle = _.BookTitle,
+                }).ToList (),
+                CreatedAt = _.CreatedAt
+        });
 
-        return ordersViewDto;
+        return ordersViewDto.ToList ();
     }
 
     private static FilterDefinition<Models.Order> BuildOrderQuery (GetUserOrderHistoryQuery request) {

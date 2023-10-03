@@ -5,7 +5,7 @@ namespace Order.API.Data.Repository.Interfaces;
 
 public interface IOrderRepository {
 
-    Task<Order.API.Models.Order> GetOrderById (Guid orderId);
+    Task<Order.API.Models.Order> GetOrderById (string orderId);
     Task<IEnumerable<Order.API.Models.Order>> GetOrdersByUsername (string username);
     Task<IEnumerable<Order.API.Models.Order>> GetOrdersByQuery(FilterDefinition<Models.Order> filter);
         Task CreateOrder (Order.API.Models.Order order);

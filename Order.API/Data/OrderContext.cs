@@ -1,7 +1,7 @@
 using MongoDB.Driver;
 using Order.API.Data.Interfaces;
 
-namespace PurchaseToken.API.Data;
+namespace Order.API.Data;
 
 public class OrderContext : IOrderContext {
     public OrderContext (IConfiguration configuration) {
