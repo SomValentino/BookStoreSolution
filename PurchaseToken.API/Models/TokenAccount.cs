@@ -8,7 +8,7 @@ public class TokenAccount{
     public string UserId { get; private set; }
     public long BookPurchaseToken { get; private set; }
 
-    public TokenAccount(string userId,long bookPurchaseToken)
+    public TokenAccount(string userId,long bookPurchaseToken = 0)
     {
         UserId = userId;
         BookPurchaseToken = bookPurchaseToken;
