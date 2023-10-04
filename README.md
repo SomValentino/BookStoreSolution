@@ -89,4 +89,15 @@ docker-compose -f docker-compose.yml -f docker-compose.override.yml up -d
 
 * Rabbit Management Dashboard -> http://host.docker.internal:15672 -- guest/guest
 
+### Future Improvements
+
+Due to the time constraints the following futures were not added
+
+* API Gateway implementation here Ocelet apigateway or APIM (Azure API Management) or AWS API Gateway will be suitable
+
+* Service monitoring solution for logging such Elastic search with Kibana will be nice for centralized logging
+
+* Azure blob storage or S3 integration for saving book images
+
+
 
