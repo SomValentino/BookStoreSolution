@@ -1,10 +1,9 @@
+using EventBus.Messages.Events;
 using FluentAssertions;
 using MassTransit;
 using Microsoft.Extensions.Logging;
-using MongoDB.Driver;
 using Moq;
 using Order.API.Application.Commands.AuthorizeOrder;
-using Order.API.Application.Commands.CheckoutOrder;
 using Order.API.Data.Repository.Interfaces;
 using Order.API.GrpcClient;
 using Order.API.Models;
@@ -84,6 +83,27 @@ public class AuthorizeOrderCommandHandlerTests {
         }, CancellationToken.None);
 
         result.OrderStatus.Should ().Be (OrderStatus.Comfirmed);
+    }
+
+    [Fact]
+    public async Task AuthorizeOrderCommandHandler_OnSuccessFulAuthoriztion_PublishOrderStatusConfirmedEvent () {
+        _orderRepositoryMock.Setup (_ => _.GetOrderById (_pendingOrder.OrderId)).ReturnsAsync (_pendingOrder);
+
+        _paymentProtoGrpcClientServiceMock.Setup (_ => _.AuthorizePaymentAsync (new PaymentRequest {
+            UserId = _pendingOrder.UserId,
+                Amount = _pendingOrder.TotalPrice
+        }, null, null, CancellationToken.None)).Returns (new Grpc.Core.AsyncUnaryCall<PaymentResponse> (Task.FromResult (new PaymentResponse {
+            Status = true
+        }), null!, null!, null!, null!));
+
+        var authorizeOrderCommandHandler = new AuthorizeOrderCommandHandler (_orderRepositoryMock.Object,
+            new PaymentGrpcClientService (_paymentProtoGrpcClientServiceMock.Object), _publishEndpointMock.Object, _logger.Object);
+
+        var result = await authorizeOrderCommandHandler.Handle (new AuthorizeOrderCommand {
+            OrderId = _pendingOrder.OrderId
+        }, CancellationToken.None);
+
+        _publishEndpointMock.Verify (_ => _.Publish (It.IsAny<OrderStatusConfirmedEvent> (), CancellationToken.None), Times.Once);
     }
 
     [Fact]

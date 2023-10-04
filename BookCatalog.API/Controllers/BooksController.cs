@@ -27,17 +27,22 @@ public class BooksController : ControllerBase {
 
     [HttpGet ("all")]
     public async Task<IActionResult> GetBooks (string? title = null) {
-
+        _logger.LogInformation ("Fetching books for user");
         var books = await _bookCatalogService.GetBooksAsync (title);
-
+        _logger.LogInformation ("Fetched books");
         return Ok (books.Select (_ => _.ToBookViewDto ()));
     }
 
     [HttpGet ("{id}")]
     public async Task<IActionResult> GetBook (Guid id) {
+
+        _logger.LogInformation ("Fetching book with id {id}", id);
+
         var book = await _bookCatalogService.GetBookByIdAsync (id);
 
         if (book == null) return NotFound ();
+
+        _logger.LogInformation ("Fetched book");
 
         return Ok (book.ToBookViewDto ());
     }
@@ -93,7 +98,7 @@ public class BooksController : ControllerBase {
     }
 
     [Authorize (Roles = "Administrator")]
-    [HttpDelete("{id}")]
+    [HttpDelete ("{id}")]
     public async Task<IActionResult> DeleteBook (Guid id) {
         var book = await _bookCatalogService.GetBookByIdAsync (id);
 

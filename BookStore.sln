@@ -27,6 +27,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Basket.API.Tests", "Tests\B
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Order.API.Tests", "Tests\Order.API.Tests\Order.API.Tests.csproj", "{F930CFAA-382D-46C5-9687-6D0BA15AD862}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookCatalog.API.Tests", "Tests\BookCatalog.API.Tests\BookCatalog.API.Tests.csproj", "{47E69F9A-30EE-4223-90CF-742870579657}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -73,6 +75,10 @@ Global
 		{F930CFAA-382D-46C5-9687-6D0BA15AD862}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F930CFAA-382D-46C5-9687-6D0BA15AD862}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F930CFAA-382D-46C5-9687-6D0BA15AD862}.Release|Any CPU.Build.0 = Release|Any CPU
+		{47E69F9A-30EE-4223-90CF-742870579657}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{47E69F9A-30EE-4223-90CF-742870579657}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{47E69F9A-30EE-4223-90CF-742870579657}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{47E69F9A-30EE-4223-90CF-742870579657}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -86,5 +92,6 @@ Global
 		{72915F98-C17F-42AC-946F-5BDF32D18A6F} = {5E6A2B40-4FCB-4BBC-895A-7DEAE27E0682}
 		{12C9C374-AF65-4DCF-8E14-CA92439704CB} = {5E6A2B40-4FCB-4BBC-895A-7DEAE27E0682}
 		{F930CFAA-382D-46C5-9687-6D0BA15AD862} = {5E6A2B40-4FCB-4BBC-895A-7DEAE27E0682}
+		{47E69F9A-30EE-4223-90CF-742870579657} = {5E6A2B40-4FCB-4BBC-895A-7DEAE27E0682}
 	EndGlobalSection
 EndGlobal

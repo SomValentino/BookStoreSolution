@@ -54,16 +54,25 @@ public class BasketController : ControllerBase {
     [ProducesResponseType ((int) HttpStatusCode.BadRequest)]
     public async Task<IActionResult> Checkout () {
         if (string.IsNullOrEmpty (UserId)) return Unauthorized ();
+        _logger.LogInformation("Fetching basket for user with id {id}",UserId);
         var basket = await _basketService.GetBasketAsync (UserId);
         if (basket == null) {
             return BadRequest ();
         }
+        _logger.LogInformation("Successfully fetched basket for user");
+
+        _logger.LogInformation("Getting user claims");
+
         var UserName = User.Claims.FirstOrDefault (_ => _.Type == JwtClaimTypes.PreferredUserName)?.Value ?? string.Empty;
         var firstName = User.Claims.FirstOrDefault (_ => _.Type == JwtClaimTypes.GivenName)?.Value ?? string.Empty;
         var lastName = User.Claims.FirstOrDefault (_ => _.Type == JwtClaimTypes.FamilyName)?.Value ?? string.Empty;
         var emailAddress = User.Claims.FirstOrDefault (_ => _.Type == JwtClaimTypes.Email)?.Value ?? string.Empty;
 
+        _logger.LogInformation("Fetched the following claims UserName {username}, FirstName {firstName}, LastName {lastName}, EmailAddress {emailAddress}",UserName,firstName,lastName,emailAddress);
+
+        _logger.LogInformation("Checking out User basket");
         await _basketService.CheckoutAsync (UserId, UserName, firstName, lastName, emailAddress, basket);
+        _logger.LogInformation("Successfully checkout user basket");
 
         return Accepted ();
     }
