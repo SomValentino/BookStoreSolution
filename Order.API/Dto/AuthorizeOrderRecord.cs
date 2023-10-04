@@ -1,5 +1,5 @@
 namespace Order.API.Dto;
 
 public record AuthorizeOrderRecord {
-    public string? OrderId { get; set; }
+    public string OrderId { get; set; }
 }

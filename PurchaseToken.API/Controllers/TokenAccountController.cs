@@ -13,7 +13,7 @@ namespace PurchaseToken.API.Controllers;
 public class TokenAccountController : ControllerBase {
     private readonly ITokenAccountRepository _tokenAccountRepository;
 
-    private string UserId => User.Claims.FirstOrDefault (_ => _.Type == JwtClaimTypes.Subject) !.Value;
+    private string UserId => User.Claims.FirstOrDefault (_ => _.Type == JwtClaimTypes.Subject)?.Value ?? string.Empty;
 
     public TokenAccountController (ITokenAccountRepository tokenAccountRepository) {
         _tokenAccountRepository = tokenAccountRepository;
@@ -22,6 +22,8 @@ public class TokenAccountController : ControllerBase {
     [HttpGet]
     public async Task<IActionResult> GetBalance () {
 
+        if (string.IsNullOrEmpty (UserId)) return Unauthorized ();
+
         var tokenAccount = await GetTokenAccountAsync ();
 
         return Ok (new { Balance = tokenAccount.BookPurchaseToken });
@@ -29,6 +31,7 @@ public class TokenAccountController : ControllerBase {
 
     [HttpPost ("deposit")]
     public async Task<IActionResult> Deposit ([FromQuery] long amount) {
+        if (string.IsNullOrEmpty (UserId)) return Unauthorized ();
         var tokenAccount = await GetTokenAccountAsync ();
 
         tokenAccount.Deposit (amount);
@@ -40,15 +43,16 @@ public class TokenAccountController : ControllerBase {
 
     [HttpPost ("withdraw")]
     public async Task<IActionResult> WithDraw ([FromQuery] long amount) {
+        if (string.IsNullOrEmpty (UserId)) return Unauthorized ();
         var tokenAccount = await GetTokenAccountAsync ();
 
-        if(amount > tokenAccount.BookPurchaseToken) return BadRequest("Insufficient funds");
+        if (amount > tokenAccount.BookPurchaseToken) return BadRequest ("Insufficient funds");
 
-        tokenAccount.WithDraw(amount);
+        tokenAccount.WithDraw (amount);
 
-        await _tokenAccountRepository.UpdateTokenAccount(tokenAccount);
+        await _tokenAccountRepository.UpdateTokenAccount (tokenAccount);
 
-        return NoContent();
+        return NoContent ();
     }
 
     #region private methods

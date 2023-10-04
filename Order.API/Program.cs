@@ -9,6 +9,7 @@ using IdentityServer4.AccessTokenValidation;
 using MassTransit;
 using MediatR;
 using Microsoft.OpenApi.Models;
+using Order.API;
 using Order.API.Application.Behaviours;
 using Order.API.Data;
 using Order.API.Data.Interfaces;
@@ -104,6 +105,7 @@ if (app.Environment.IsDevelopment ()) {
         c.OAuthClientId (builder.Configuration.GetValue<string> ("client_id"));
     });
 }
+app.UseException();
 app.UseCorrelationIdMiddleware ();
 app.UseHttpsRedirection ();
 app.UseAuthentication ();

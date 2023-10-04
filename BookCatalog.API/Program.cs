@@ -1,4 +1,5 @@
 using System.Text.Json;
+using BookCatalog.API;
 using BookCatalog.API.Data;
 using BookCatalog.API.Data.Repository;
 using BookCatalog.API.Events;
@@ -99,6 +100,7 @@ if (app.Environment.IsDevelopment ()) {
     });
 }
 
+app.UseException();
 app.UseCorrelationIdMiddleware ();
 app.UseHttpsRedirection ();
 app.UseAuthentication ();

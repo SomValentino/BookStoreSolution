@@ -10,6 +10,7 @@ public static class ResponseExtensions{
             Title = book.Title,
             Price = book.Price,
             Quantity = book.Quantity,
+            HasStock = book.HasStock,
             Authors = book.Authors.Select(_ => new AuthorViewRecord { 
                 AuthorId = _.AuthorId,
                 FirstName = _.FirstName,

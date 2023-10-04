@@ -1,4 +1,5 @@
 using System.Text.Json;
+using Basket.API;
 using Basket.API.Repository;
 using Basket.API.Services;
 using BookCatalog.API.Extensions;
@@ -83,7 +84,7 @@ if (app.Environment.IsDevelopment ()) {
         c.OAuthClientId (builder.Configuration.GetValue<string> ("client_id"));
     });
 }
-
+app.UseException();
 app.UseCorrelationIdMiddleware ();
 app.UseHttpsRedirection ();
 

@@ -21,12 +21,10 @@ namespace Basket.API.Controllers;
 [Authorize]
 [Route ("[controller]")]
 public class BasketController : ControllerBase {
-
-    private readonly HttpClient _client;
     private readonly IBasketService _basketService;
     private readonly ILogger<BasketController> _logger;
 
-    private string UserId => User.Claims.FirstOrDefault (_ => _.Type == JwtClaimTypes.Subject) !.Value;
+    private string UserId => User.Claims.FirstOrDefault (_ => _.Type == JwtClaimTypes.Subject)?.Value ?? string.Empty;
 
     public BasketController (IBasketService basketService,
         ILogger<BasketController> logger) {
@@ -37,14 +35,14 @@ public class BasketController : ControllerBase {
     [HttpGet (Name = "GetBasket")]
     [ProducesResponseType (typeof (ShoppingCart), (int) HttpStatusCode.OK)]
     public async Task<ActionResult<ShoppingCart>> GetBasket () {
-
+        if (string.IsNullOrEmpty (UserId)) return Unauthorized ();
         return Ok (await _basketService.GetBasketAsync (UserId));
     }
 
     [HttpPost]
     [ProducesResponseType (typeof (List<ShoppingCartItem>), (int) HttpStatusCode.OK)]
     public async Task<ActionResult<ShoppingCart>> UpdateBasket ([FromBody] List<ShoppingCartItem> items) {
-
+        if (string.IsNullOrEmpty (UserId)) return Unauthorized ();
         if (items == null || !items.Any ()) return BadRequest ();
 
         return Ok (await _basketService.UpdateBasetAsync (UserId, items));
@@ -55,7 +53,7 @@ public class BasketController : ControllerBase {
     [ProducesResponseType ((int) HttpStatusCode.Accepted)]
     [ProducesResponseType ((int) HttpStatusCode.BadRequest)]
     public async Task<IActionResult> Checkout () {
-
+        if (string.IsNullOrEmpty (UserId)) return Unauthorized ();
         var basket = await _basketService.GetBasketAsync (UserId);
         if (basket == null) {
             return BadRequest ();

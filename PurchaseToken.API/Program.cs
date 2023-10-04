@@ -5,6 +5,7 @@ using IdentityModel.AspNetCore.OAuth2Introspection;
 using IdentityServer4.AccessTokenValidation;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.OpenApi.Models;
+using PurchaseToken.API;
 using PurchaseToken.API.Data;
 using PurchaseToken.API.Data.Interfaces;
 using PurchaseToken.API.Data.Repository;
@@ -81,7 +82,7 @@ if (app.Environment.IsDevelopment ()) {
         c.OAuthClientId (builder.Configuration.GetValue<string> ("client_id"));
     });
 }
-
+app.UseException();
 app.UseCorrelationIdMiddleware ();
 app.UseAuthentication ();
 
