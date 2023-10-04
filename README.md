@@ -50,6 +50,9 @@ publishes a basketcheckout event to the rabbitMQ event bus. The order api consum
 * Two scopes Gatewayscope and API has been been created to enable service authentication
 * This service is an adaption of the IdentityServer4 https://identityserver4.readthedocs.io/en/latest/
 
+### RabbitMQ EventBus
+* For publishing asynchronous events that are consumed by other services
+
 ### RUN PROJECT
 
 You will need the following tools:
@@ -85,7 +88,7 @@ docker-compose -f docker-compose.yml -f docker-compose.override.yml up -d
 
 * PurchaseToken API -> https://localhost:5045/swagger/index.html
 
-* Identity Server -> https://localhost:5044
+* Identity Server -> https://localhost:5044. Click on register to create a new identity user.
 
 * Rabbit Management Dashboard -> http://host.docker.internal:15672 -- guest/guest
 

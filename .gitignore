@@ -24,7 +24,6 @@
 **/obj
 **/secrets.dev.yaml
 **/values.dev.yaml
-**/sql
 README.md
 __azurite_db_blob_extent__.json
 __azurite_db_blob__.json
