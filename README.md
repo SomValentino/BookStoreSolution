@@ -2,7 +2,7 @@
 
 ### Architecture
 
-![Alt text](Architecture_digram.png "Architecture diagram")
+![Alt text](Architecture_diagram.png "Architecture diagram")
 
 ### Book Order Process Flow
 
@@ -86,5 +86,7 @@ docker-compose -f docker-compose.yml -f docker-compose.override.yml up -d
 * PurchaseToken API -> https://localhost:5045/swagger/index.html
 
 * Identity Server -> https://localhost:5044
+
+* Rabbit Management Dashboard -> http://host.docker.internal:15672 -- guest/guest
 
 
