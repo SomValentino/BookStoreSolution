@@ -46,8 +46,7 @@ public class BooksController : ControllerBase {
 
         return Ok (book.ToBookViewDto ());
     }
-
-    [Authorize (Roles = "Administrator")]
+    
     [HttpPost]
     public async Task<IActionResult> CreateBook ([FromBody] BookRecord bookRecord) {
 
@@ -70,7 +69,6 @@ public class BooksController : ControllerBase {
         return Ok (book.ToBookViewDto ());
     }
 
-    [Authorize (Roles = "Administrator")]
     [HttpPut ("{id}")]
     public async Task<IActionResult> UpdateBook (Guid id, [FromBody] BookRecord bookRecord) {
         var book = await _bookCatalogService.GetBookByIdAsync (id);
@@ -97,7 +95,6 @@ public class BooksController : ControllerBase {
         return NoContent ();
     }
 
-    [Authorize (Roles = "Administrator")]
     [HttpDelete ("{id}")]
     public async Task<IActionResult> DeleteBook (Guid id) {
         var book = await _bookCatalogService.GetBookByIdAsync (id);
