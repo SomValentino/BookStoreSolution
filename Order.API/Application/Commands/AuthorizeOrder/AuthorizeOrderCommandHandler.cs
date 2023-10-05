@@ -1,4 +1,5 @@
 using Ardalis.GuardClauses;
+using EventBus.Messages.Common;
 using EventBus.Messages.Events;
 using MassTransit;
 using MediatR;
@@ -50,7 +51,7 @@ public class AuthorizeOrderCommandHandler : IRequestHandler<AuthorizeOrderComman
             var paymentResponse = await _paymentGrpcClientService.Authorize (new Protos.PaymentRequest {
                 UserId = order.UserId,
                 Amount = order.TotalPrice
-            });
+            },request.CorrelationId!);
 
             if (!paymentResponse.Status) {
 
@@ -72,6 +73,8 @@ public class AuthorizeOrderCommandHandler : IRequestHandler<AuthorizeOrderComman
             var eventMessage = new OrderStatusConfirmedEvent {
                 BookItems = order.Items.Select (_ => new BookItem (_.BookId, _.Quantity))
             };
+
+            eventMessage.Metadata.TryAdd(EventBusConstants._correlationIdHeader,request.CorrelationId!);
 
             await PublishOrderConfimedEvent (eventMessage);
 

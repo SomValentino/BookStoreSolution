@@ -23,4 +23,8 @@
     <Protobuf Include="Protos\Payment.proto" GrpcServices="Server" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Common\EventBus.Messages\EventBus.Messages.csproj" />
+  </ItemGroup>
+
 </Project>

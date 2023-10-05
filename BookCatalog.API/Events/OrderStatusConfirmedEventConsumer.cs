@@ -1,4 +1,5 @@
 using BookCatalog.API.Services.interfaces;
+using EventBus.Messages.Common;
 using EventBus.Messages.Events;
 using MassTransit;
 
@@ -15,6 +16,9 @@ public class OrderStatusConfirmedEventConsumer : IConsumer<OrderStatusConfirmedE
     }
     public async Task Consume (ConsumeContext<OrderStatusConfirmedEvent> context) {
         var orderStatusConfirmedEvent = context.Message;
+        if (orderStatusConfirmedEvent.Metadata.TryGetValue (EventBusConstants._correlationIdHeader, out string correlationId)) {
+            _logger.LogInformation("Consuming OrderStatusConfirmedEvent for correlationId : {id}", correlationId);
+        }
         _logger.LogInformation ("fetching books to update from database");
 
         var books = await _bookCatalogService

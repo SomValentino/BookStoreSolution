@@ -1,3 +1,5 @@
+using BookStore.Helpers.Features;
+using EventBus.Messages.Common;
 using Grpc.Core;
 using Purchase.API.Protos;
 using PurchaseToken.API.Data.Repository.Interfaces;
@@ -16,7 +18,11 @@ public class PaymentGrpcService : PaymentProtoService.PaymentProtoServiceBase {
 
     public override async Task<PaymentResponse> AuthorizePayment (PaymentRequest request, ServerCallContext context) {
         try {
-            _logger.LogInformation("Fetching token account for user with Id: {id}", request.UserId);
+            if (context.RequestHeaders != null) {
+                var correlationId = context.RequestHeaders.GetValue (EventBusConstants._correlationIdHeader);
+                _logger.LogInformation ("Handling Grpc request with correlationId: {id}", correlationId);
+            }
+            _logger.LogInformation ("Fetching token account for user with Id: {id}", request.UserId);
             var tokenAccount = await _tokenAccountRepository.GetUserBalance (request.UserId);
 
             if (tokenAccount == null) {
@@ -37,7 +43,7 @@ public class PaymentGrpcService : PaymentProtoService.PaymentProtoServiceBase {
 
             await _tokenAccountRepository.UpdateTokenAccount (tokenAccount);
 
-            _logger.LogInformation("Successfully completed payment authorization");
+            _logger.LogInformation ("Successfully completed payment authorization");
 
             return new PaymentResponse {
                 Status = true
@@ -48,7 +54,7 @@ public class PaymentGrpcService : PaymentProtoService.PaymentProtoServiceBase {
             _logger.LogError (ex, ex.Message);
             return new PaymentResponse {
                 Status = false,
-                ErrorMessage ="System Error"
+                    ErrorMessage = "System Error"
             };
         }
     }

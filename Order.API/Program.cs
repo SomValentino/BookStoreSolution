@@ -1,6 +1,5 @@
 using System.Reflection;
 using System.Text.Json;
-using BookCatalog.API.Extensions;
 using BookStore.Helpers.Extensions;
 using EventBus.Messages.Common;
 using FluentValidation;
@@ -16,6 +15,7 @@ using Order.API.Data.Interfaces;
 using Order.API.Data.Repository;
 using Order.API.Data.Repository.Interfaces;
 using Order.API.Events;
+using Order.API.Extensions;
 using Order.API.GrpcClient;
 using Order.API.Protos;
 
@@ -28,7 +28,7 @@ builder.Services.AddControllers ();
 builder.Services.AddEndpointsApiExplorer ();
 builder.Services.AddSwaggerGen (options => {
     options.MapType<JsonDocument> (() => new OpenApiSchema { Type = "object" });
-
+    options.UseInlineDefinitionsForEnums ();
     options.AddSecurityDefinition ("Username and password login", new OpenApiSecurityScheme {
         Type = SecuritySchemeType.OAuth2,
             Flows = new OpenApiOAuthFlows () {
@@ -66,13 +66,14 @@ builder.Services.AddAuthentication (IdentityServerAuthenticationDefaults.Authent
 
 builder.Services.AddCorrelationIdGeneratorService ();
 builder.Services.AddGrpcClient<PaymentProtoService.PaymentProtoServiceClient>
-    (o => o.Address = new Uri (builder.Configuration.GetValue<string>("PurchaseTokenGrpcUrl")));
-builder.Services.AddScoped<PaymentGrpcClientService>();
+    (o => o.Address = new Uri (builder.Configuration.GetValue<string> ("PurchaseTokenGrpcUrl")));
+builder.Services.AddScoped<PaymentGrpcClientService> ();
 
 builder.Services.AddHttpClient (OAuth2IntrospectionDefaults.BackChannelHttpClientName)
     .ConfigurePrimaryHttpMessageHandler (() => new HttpClientHandler {
         ServerCertificateCustomValidationCallback = (_, _, _, _) => true
     });
+builder.Services.AddSwaggerGenNewtonsoftSupport ();
 builder.Services.AddScoped<IOrderContext, OrderContext> ();
 builder.Services.AddScoped<IOrderRepository, OrderRepository> ();
 builder.Services.AddScoped<BasketCheckoutConsumer> ();
@@ -105,7 +106,7 @@ if (app.Environment.IsDevelopment ()) {
         c.OAuthClientId (builder.Configuration.GetValue<string> ("client_id"));
     });
 }
-app.UseException();
+app.UseException ();
 app.UseCorrelationIdMiddleware ();
 app.UseHttpsRedirection ();
 app.UseAuthentication ();

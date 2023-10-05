@@ -2,6 +2,8 @@ using AutoMapper;
 using Basket.API.Models;
 using Basket.API.Models.ShoppingCartAggregate;
 using Basket.API.Repository;
+using BookStore.Helpers.Interfaces;
+using EventBus.Messages.Common;
 using EventBus.Messages.Events;
 using MassTransit;
 using Newtonsoft.Json;
@@ -13,15 +15,18 @@ public class BasketService : IBasketService {
     private readonly IBasketRepository _repository;
     private readonly IMapper _mapper;
     private readonly IPublishEndpoint _publishEndpoint;
+    private readonly ICorrelationGenerator _correlationGenerator;
     private readonly ILogger<BasketService> _logger;
 
     public BasketService (IBasketRepository repository,
         IMapper mapper,
         IPublishEndpoint publishEndpoint,
-        ILogger<BasketService> logger) {
+        ILogger<BasketService> logger,
+        ICorrelationGenerator correlationGenerator) {
         _repository = repository;
         _mapper = mapper;
         _publishEndpoint = publishEndpoint;
+        _correlationGenerator = correlationGenerator;
         _logger = logger;
     }
     public async Task CheckoutAsync (string userId, string username, string firstName,
@@ -34,10 +39,12 @@ public class BasketService : IBasketService {
             FirstName = firstName,
             LastName = lastName,
             EmailAddress = emailAddress,
-            Items = shoppingCart.Items
+            Items = shoppingCart.Items,
         };
         // send checkout event to rabbitmq
         var eventMessage = _mapper.Map<BasketCheckoutEvent> (basketCheckout);
+
+        eventMessage.Metadata.TryAdd(EventBusConstants._correlationIdHeader,_correlationGenerator.Get());
 
         _logger.LogInformation("Sending order to eventbus:{order}", JsonConvert.SerializeObject (eventMessage));
 

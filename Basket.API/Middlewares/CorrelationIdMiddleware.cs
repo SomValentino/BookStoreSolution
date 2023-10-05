@@ -1,25 +1,31 @@
 using BookStore.Helpers.Interfaces;
+using EventBus.Messages.Common;
 using Microsoft.Extensions.Primitives;
 
 namespace Basket.API.Middlewares;
 
 public class CorrelationIdMiddleware {
     private readonly RequestDelegate _next;
-    private const string _correlationIdHeader = "X-Correlation-Id";
+    private readonly ILogger<CorrelationIdMiddleware> _logger;
 
-    public CorrelationIdMiddleware (RequestDelegate next) {
+    public CorrelationIdMiddleware (RequestDelegate next, ILogger<CorrelationIdMiddleware> logger) {
         _next = next;
+        _logger = logger;
     }
 
     public async Task Invoke (HttpContext context, ICorrelationGenerator correlationIdGenerator) {
         var correlationId = GetCorrelationId (context, correlationIdGenerator);
         AddCorrelationIdHeaderToResponse (context, correlationId);
 
+        if (!string.IsNullOrEmpty (correlationIdGenerator.Get ())) {
+            _logger.LogInformation ("Handling request with correlationId {id}", correlationId!);
+        }
+
         await _next (context);
     }
 
     private static StringValues GetCorrelationId (HttpContext context, ICorrelationGenerator correlationIdGenerator) {
-        if (context.Request.Headers.TryGetValue (_correlationIdHeader, out var correlationId)) {
+        if (context.Request.Headers.TryGetValue (EventBusConstants._correlationIdHeader, out var correlationId)) {
             correlationIdGenerator.Set (correlationId!);
             return correlationId;
         } else {
@@ -29,7 +35,7 @@ public class CorrelationIdMiddleware {
 
     private static void AddCorrelationIdHeaderToResponse (HttpContext context, StringValues correlationId) {
         context.Response.OnStarting (() => {
-            context.Response.Headers.Add (_correlationIdHeader, new [] { correlationId.ToString () });
+            context.Response.Headers.Add (EventBusConstants._correlationIdHeader, new [] { correlationId.ToString () });
             return Task.CompletedTask;
         });
     }

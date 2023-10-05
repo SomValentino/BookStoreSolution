@@ -1,4 +1,5 @@
 using AutoMapper;
+using EventBus.Messages.Common;
 using EventBus.Messages.Events;
 using MassTransit;
 using MediatR;
@@ -19,6 +20,9 @@ public class BasketCheckoutConsumer : IConsumer<BasketCheckoutEvent> {
     }
     public async Task Consume (ConsumeContext<BasketCheckoutEvent> context) {
         var checkoutEvent = context.Message;
+        if(checkoutEvent.Metadata.TryGetValue(EventBusConstants._correlationIdHeader,out string correlationId)){
+            _logger.LogInformation("Consuming checkout event with correlationId: {id}",correlationId);
+        }
         var command = new CheckoutOrderCommand {
             UserId = checkoutEvent.UserId,
             UserName = checkoutEvent.UserName,
