@@ -24,7 +24,7 @@ public class BookCatalogService : IBookCatalogService {
         } catch (System.Exception ex) {
             transaction.Rollback ();
             _logger.LogError (ex, ex.Message);
-            return default!;
+            return default !;
         }
     }
 
@@ -51,12 +51,12 @@ public class BookCatalogService : IBookCatalogService {
         return books;
     }
 
-    public async Task<IEnumerable<Book>> GetBooksAsync (string? title = null) {
+    public async Task<IEnumerable<Book>> GetBooksAsync (string? title = null, int page = 1, int pageSize = 10) {
         if (!string.IsNullOrEmpty (title)) {
-            return await _bookRepository.ListAsync (new BookSearchByTitleSpec (title!));
+            return await _bookRepository.ListAsync (new BookSearchByTitleSpec (title!,page,pageSize));
         }
 
-        return await _bookRepository.ListAsync (new BookWithAuthorsSpec ());
+        return await _bookRepository.ListAsync (new BookWithAuthorsSpec (page,pageSize));
     }
 
     public async Task UpdateBookAsync (Book book) {

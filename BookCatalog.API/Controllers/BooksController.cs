@@ -26,9 +26,9 @@ public class BooksController : ControllerBase {
     }
 
     [HttpGet ("all")]
-    public async Task<IActionResult> GetBooks (string? title = null) {
+    public async Task<IActionResult> GetBooks (string? title = null, int page = 1, int pageSize = 10) {
         _logger.LogInformation ("Fetching books for user");
-        var books = await _bookCatalogService.GetBooksAsync (title);
+        var books = await _bookCatalogService.GetBooksAsync (title,page,pageSize);
         _logger.LogInformation ("Fetched books");
         return Ok (books.Select (_ => _.ToBookViewDto ()));
     }
@@ -46,7 +46,7 @@ public class BooksController : ControllerBase {
 
         return Ok (book.ToBookViewDto ());
     }
-    
+
     [HttpPost]
     public async Task<IActionResult> CreateBook ([FromBody] BookRecord bookRecord) {
 

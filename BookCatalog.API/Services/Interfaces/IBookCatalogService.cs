@@ -9,7 +9,7 @@ public interface IBookCatalogService {
 
     Task UpdateBookAsync (IEnumerable<Book> book);
 
-    Task<IEnumerable<Book>> GetBooksAsync (string? title = null);
+    Task<IEnumerable<Book>> GetBooksAsync (string? title = null,int page = 1, int pageSize = 10);
 
     Task<Book> GetBookByIdAsync (Guid id);
 

@@ -9,6 +9,7 @@ using IdentityServer4.AccessTokenValidation;
 using MassTransit;
 using MediatR;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json.Converters;
 using Order.API;
 using Order.API.Application.Behaviours;
 using Order.API.Data;
@@ -25,12 +26,17 @@ var builder = WebApplication.CreateBuilder (args);
 // Add services to the container.
 
 builder.Services.AddControllers ()
-    .AddJsonOptions (options => { options.JsonSerializerOptions.Converters.Add (new JsonStringEnumConverter ()); });;
+    .AddNewtonsoftJson (o => {
+        o.SerializerSettings.Converters.Add (new StringEnumConverter {
+            CamelCaseText = true
+        });
+    });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer ();
 builder.Services.AddSwaggerGen (options => {
     options.MapType<JsonDocument> (() => new OpenApiSchema { Type = "object" });
-    options.UseInlineDefinitionsForEnums ();
+    //options.SchemaFilter<EnumSchemaFilter> ();
+    options.EnableAnnotations ();
     options.AddSecurityDefinition ("Username and password login", new OpenApiSecurityScheme {
         Type = SecuritySchemeType.OAuth2,
             Flows = new OpenApiOAuthFlows () {

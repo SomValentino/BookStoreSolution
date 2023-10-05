@@ -67,7 +67,7 @@ public class AuthorizeOrderCommandHandler : IRequestHandler<AuthorizeOrderComman
 
             _logger.LogInformation ("Successfully authorized order payment");
 
-            order.OrderStatus = OrderStatus.Comfirmed;
+            order.OrderStatus = OrderStatus.Confirmed;
             await _orderRepository.UpdateOrder (order);
 
             var eventMessage = new OrderStatusConfirmedEvent {
