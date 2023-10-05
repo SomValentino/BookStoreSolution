@@ -6,8 +6,6 @@ using Order.API.Models;
 namespace Order.API.Dto;
 
 public record UserOrderHistoryRecord {
-    [EnumDataType (typeof (OrderStatus))]
-    [JsonConverter (typeof (StringEnumConverter))]
     public OrderStatus? OrderStatus { get; set; }
     public DateTime? StartDate { get; set; }
     public DateTime? EndDate { get; set; }
