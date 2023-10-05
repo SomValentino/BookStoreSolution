@@ -72,7 +72,7 @@ services:
     depends_on:
       - identitydb2
     volumes:
-      - ~/.aspnet/https:/https:ro
+      - ./certs:/https:ro
       - ./IdentityServer/wwwroot:/app/wwwroot
 
   purchasetokenapi:
@@ -97,7 +97,7 @@ services:
       - 5045:443
       - 9045:81
     volumes:
-      - ~/.aspnet/https:/https:ro
+      - ./certs:/https:ro
 
   bookcatalogapi:
     container_name: bookcatalogapi
@@ -115,7 +115,7 @@ services:
     ports:
       - 5046:443
     volumes:
-      - ~/.aspnet/https:/https:ro
+      - ./certs:/https:ro
 
   basketapi:
     container_name:  basketapi
@@ -133,7 +133,7 @@ services:
     ports:
       - 5047:443
     volumes:
-      - ~/.aspnet/https:/https:ro
+      - ./certs:/https:ro
 
   orderapi:
     container_name:  orderapi
@@ -152,4 +152,4 @@ services:
     ports:
       - 5048:443
     volumes:
-      - ~/.aspnet/https:/https:ro
+      - ./certs:/https:ro
